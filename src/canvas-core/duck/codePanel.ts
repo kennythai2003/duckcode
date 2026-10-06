@@ -6,18 +6,18 @@ import { fillShape, clipped } from "../gallery";
 import { FONT_MONO, roundRect, text, measure } from "./kit";
 
 export const CODE = {
-  BG: "#1d222c", EDGE: "#323a48", TEXT: "#d3d8df", DIM: "#6d7685", KW: "#d98aa3", FN: "#dcb65a", NUM: "#d99a6c", BUILTIN: "#89b9cf", OP: "#a3acb9", HL: "#dcb65a",
+  BG: "#1d222c", EDGE: "#323a48", TEXT: "#d3d8df", DIM: "#6d7685", KW: "#d98aa3", FN: "#dcb65a", NUM: "#d99a6c", BUILTIN: "#89b9cf", OP: "#a3acb9", HL: "#dcb65a", STR: "#a9c48c",
 };
 const KEYWORDS = new Set(["def", "for", "in", "if", "else", "elif", "return", "while", "not", "and", "or", "None", "True", "False", "class", "break", "continue"]);
 const BUILTINS = new Set(["print", "enumerate", "range", "len", "dict", "list", "set", "min", "max", "sorted"]);
 
 type Tok = { s: string; col: string };
 export const tokenize = (line: string): Tok[] => {
-  const out: Tok[] = [], re = /(\s+)|([A-Za-z_][A-Za-z0-9_]*)|(\d+)|(#.*)|(.)/g; let m: RegExpExecArray | null, prev = "";
+  const out: Tok[] = [], re = /(\s+)|([A-Za-z_][A-Za-z0-9_]*)|(\d+)|(#.*)|("[^"]*"|'[^']*')|(.)/g; let m: RegExpExecArray | null, prev = "";
   while ((m = re.exec(line))) {
-    const [s, ws, id, num, com] = m;
+    const [s, ws, id, num, com, str] = m;
     let col = CODE.TEXT;
-    if (ws) col = CODE.TEXT; else if (com) col = CODE.DIM; else if (num) col = CODE.NUM;
+    if (ws) col = CODE.TEXT; else if (com) col = CODE.DIM; else if (str) col = CODE.STR; else if (num) col = CODE.NUM;
     else if (id) col = KEYWORDS.has(id) ? CODE.KW : BUILTINS.has(id) ? CODE.BUILTIN : prev === "def" ? CODE.FN : CODE.TEXT;
     else col = CODE.OP;
     out.push({ s, col }); if (!ws) prev = id ?? s;
@@ -34,7 +34,7 @@ export type PanelState = {
   output?: string; outQ?: number; // the console line and how much of it has printed
   pulse?: number;          // 0..1 a glow on the bar (the line that matters)
 };
-export type PanelLayout = { x: number; y: number; w: number; size: number; lh: number; pad: number };
+export type PanelLayout = { x: number; y: number; w: number; size: number; lh: number; pad: number; file?: string };
 
 export const panelHeight = (lines: string[], L: PanelLayout) => L.pad * 2 + 34 + lines.length * L.lh + 128;
 
@@ -46,7 +46,7 @@ export const drawPanel = (g: Gfx, lines: string[], L: PanelLayout, s: PanelState
     clipped(g, card, () => {
       // three window dots, like an editor
       ["#c96a62", "#d4b05a", "#7fae7c"].forEach((c, i) => fillShape(g, roundRect(L.x + 28 + i * 26, L.y + 22, 14, 14, 7, 3), c, 0.9));
-      text(g, "two_sum.py", L.x + L.w / 2, L.y + 30, { size: 22, weight: 500, family: FONT_MONO, fill: CODE.DIM });
+      text(g, L.file ?? "two_sum.py", L.x + L.w / 2, L.y + 30, { size: 22, weight: 500, family: FONT_MONO, fill: CODE.DIM });
       const top = L.y + L.pad + 34;
       // the running line's bar
       if (s.line >= 0 && (s.alpha ?? 1) > 0) {

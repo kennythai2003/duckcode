@@ -63,6 +63,9 @@ Target budget for a new problem: **~1 look sheet, 1 full render, 1 music check, 
   - `text(g, s, x, y, {size, weight, fill, stroke, sw, align})`, which must be called inside a group or a sprite.
   - `roundRect`, `ellipse`, `FONTS`.
 - **`quack.ts`**: `quackInto(L, R, sr, sample, semis, seed, pan, level)`.
+- **`motion.ts`**: `hop(f, f0, h, dur)` and `drop(f, land)`. Use these; don't copy them into the film.
+- **`chrome.ts`**: `titleSprite(env, title, sub)` and `pillSprite(env, parts)` (the parameters pill, sized to its text).
+- The code panel tokenizer colours strings. `PanelLayout.file` sets the tab name (default `two_sum.py`). **Always set it.**
 
 **Sprite keys must change when the content changes** (the label, the text, the tail offset). `drawBubble` keys on its text and on the rounded tail offset. Keep the tail offset constant relative to the bubble (`[mx + 60, my + 6]` from `cx = mx + 250, cy = my + 12`). That stops the cache growing every frame.
 
@@ -72,7 +75,7 @@ Target budget for a new problem: **~1 look sheet, 1 full render, 1 music check, 
 |---|---|
 | Title sprite | (540, 270): "Problem name", gold crayon underline, "LeetCode N · Python" |
 | Target / params pill | (540, 432). Fade it out at `print - 6` (the answer card takes its place). |
-| Ducks | `DUCK_Y = 830`, `k = 0.95`, x = `[195, 425, 655, 885]` for 4 ducks. Up to 5 ducks: k 0.8, x spaced 200 from 140. Past 6, use 2 rows or a smaller k. |
+| Ducks | `DUCK_Y = 830`, `k = 0.95`, x = `[195, 425, 655, 885]` for 4 ducks. Two groups of 3 (e.g. s and t): `k 0.68`, x `[100, 262, 424, 656, 818, 980]`, group labels at y 952-980 (validAnagram.ts). Up to 5 ducks: k 0.8, x spaced 200 from 140. Past 6, use 2 rows or a smaller k. |
 | Index tags | y 915 |
 | Data-structure row (seen pond, stack, queue…) | sign at (150, 1080), items at y 1082, x from 380 every 260 |
 | Speech bubble over a duck | cy 600, cx clamped to [260, 820], tail to (headTop.x + 40, 680) |
@@ -137,7 +140,7 @@ cd out && ffmpeg -v error -y -i still-<film>-A.png -i still-<film>-B.png -i stil
 node tools/music.mjs check src/canvas-core/<film>Score.ts#<export> 2>&1 | grep -E "FLAG|CRAFT|CHECK|master|cadences"
 node tools/render.mjs <film> 2>&1 | grep -E "audio:|draw median|output|determinism|rror"     # ~2-3 min for 900 frames
 node tools/gate.mjs <film> 2>&1 | grep -E "FAIL|GATE:"
-node tools/verify-export.mjs out/<film>.mp4 --film <film> 2>&1 | grep -E "VERIFY|FAIL"
+node tools/verify-export.mjs out/<film>.mp4 --film <film> 2>&1 | grep -E "VERIFY-EXPORT:|FAIL"
 ffmpeg -v error -y -i out/<film>.mp4 -vf "select='not(mod(n\,56))',scale=216:-1,tile=8x2" -frames:v 1 out/vsheet.png   # one look at the motion
 cp out/<film>.mp4 videos/<kebab-name>.mp4   # + a poster still, update the README table, commit, push
 ```
@@ -157,6 +160,10 @@ Add `--frames` stills only for the moments you changed. Never re-render the full
   Then the film file stays a cue table plus `draw`.
 - **Extract the shared film skeleton.** The title, target pill, ducks, rings, tags and panel wiring could become `duck/film.ts` (`duckFilm({ title, code, nums, iters, draw extras })`). Do this when making the 2nd new problem, not before. Then each new video is mostly data, which saves ~15k tokens a video.
 - **Don't download the sound pack** (recorded marimba and vibes). The user is happy with the modeled sound.
+
+## Track record
+
+- Valid Anagram, the first video made with this skill: 1 music check, 1 look sheet (with one fix: the panel tab name), 1 render, 1 gate, 1 verify. The only advisory was the ghost snare being too quiet with the `shuffle` groove; `levels.ghost: 6` fixes it.
 
 ## Quality bar (unchanged)
 
