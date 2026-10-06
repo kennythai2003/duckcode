@@ -1,6 +1,6 @@
 # duckcode
 
-Cutesy LeetCode visualizations where the input is ducks. Each array element is a rubber duck with its value on its chest. The videos are drawn and scored entirely in code with [anidoodle](https://github.com/alexgreensh/anidoodle), in its **crayon** style, with a muted palette.
+LeetCode visualizations where the input is ducks. Each array element is a rubber duck with its value on its chest. The videos are drawn and scored entirely in code with [anidoodle](https://github.com/alexgreensh/anidoodle), in its **crayon** style, with a muted palette.
 
 | Problem | Video |
 |---|---|
@@ -21,10 +21,10 @@ Cutesy LeetCode visualizations where the input is ducks. Each array element is a
 src/canvas-core/duck/      reusable duck kit
   kit.ts                   easing, lettering, geometry
   crayon.ts                the crayon hand: scribble fills, contours, palette, sprites
-  duck.ts                  the duck (poses, eyes, hop/squash) + pointer hat
+  duck.ts                  the duck (poses, eyes, hop/squash) + pointer pennant
   pond.ts                  the background plate (cached) + moving water glints
   codePanel.ts             the editor card (syntax colours, running line, watch, console)
-  fx.ts                    bubbles, seen-signpost, magnifier, sparkles, hearts, burst, splash, rings
+  fx.ts                    bubbles, seen-signpost, magnifier, entries, sparkles, check/cross, splash, rings, answer card
   quack.ts                 the quack synth
 src/canvas-core/twoSum.ts       the Two Sum film: problem, cue table, choreography
 src/canvas-core/twoSumScore.ts  its score
