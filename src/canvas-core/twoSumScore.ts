@@ -1,8 +1,9 @@
-// TWO SUM · the score. Playful, F major, 120 bpm, 12 bars = exactly the 24 s film.
-// Brief as numbers: bar 0-1 the ducks drop in (rising plinks), bars 2-5 the first duck asks and
-// remembers (the motif, stated and answered), bars 6-7 the second duck asks (fragments, then a
-// stop: the breath before the reveal), bar 8 "2 is in seen!" (home chord, the motif augmented up
-// high, the climax), bar 9 return, bar 10 the answer is shouted, bar 11 a button.
+// TWO SUM · the score. Playful but soft, F major, 120 bpm, 15 bars = exactly the 30 s film.
+// Brief as numbers: bars 0-1 the ducks drop in (rising plinks), bars 2-5 the first duck asks and
+// remembers (the motif, stated and answered), bars 6-8 the second duck asks and misses (the answer
+// phrase, quieter: a dip), bars 9-10 the third duck asks (fragments, then a stop: the breath before
+// the reveal), bar 11 "2 is in seen!" (home chord, the motif augmented up high, the climax), bar 12
+// return, bar 13 the answer card, bar 14 a button.
 // Motif: a 3-note staccato pickup cell with a leap up to the long note, answered a step lower.
 import type { Material } from "./music";
 
@@ -14,7 +15,7 @@ const M_CAD = "A5:.5 G5:.5 E5:.5 C5:.5 D5:.5 E5:.5 G5:1";          // into the h
 export const twoSumScore = (): Material => ({
   style: "playful", title: "Two Sum (duckcode)", seed: 2093, mood: "playful",
   bpm: 120, key: "F", mode: "major", meter: "4/4",
-  moodControls: { energy: 0.55, warmth: 0.5, brightness: 0.6, tension: 0.4, space: 0.45 },
+  moodControls: { energy: 0.5, warmth: 0.6, brightness: 0.45, tension: 0.4, space: 0.5 },
   levels: { chords: -5, bass: -3.5 },
   swing: 0.54, dyn: [0.58, 0.7], tail: 1.2,
   chords: {
@@ -37,6 +38,10 @@ export const twoSumScore = (): Material => ({
       lead: ["M", "M_ANS", "M_UP", "M_CAD"],
       bass: ["F2:1 C3:1 D2:1 A2:1", "Bb1:1 F2:1 C2:1 G2:1", "F2:1 C3:1 D2:1 A2:1", "G2:1 D3:1 C2:1 E2:1"],
       comp: "r:.5 x:.5 r:.5 x:.5 r:.5 x:.5 r:.5 x:.5" },
+    { kind: "verse", bars: 3, harmony: ["Dm Bb", "Gm C7", "F C7"], energy: 0.42,
+      lead: ["r:.5 A4:.25 Bb4:.25 D5:.5 r:.5 F5:.5 E5:.5 D5:1", "r:.5 Bb4:.25 C5:.25 D5:.5 r:.5 G5:.5 F5:.5 E5:1", "F5:.5 E5:.5 C5:.5 A4:.5 C5:1 r:1"],
+      bass: ["D2:1 A2:1 Bb1:1 F2:1", "G2:1 D3:1 C2:1 G2:1", "F2:1 C3:1 C2:1 E2:1"],
+      comp: "r:1 x:1 r:1 x:1" },
     { kind: "build", bars: 2, harmony: ["Dm Bb", "C7"], groove: "main", energy: 0.6,
       lead: ["r:.5 F5:.5 r:.5 F5:.5 r:.5 A5:.5 r:.5 D6:.5", "C6:.5 Bb5:.5 G5:.5 E5:.5 C5:1 r:1"],
       bass: ["D2:1 A2:1 Bb1:1 F2:1", "C2:.5 C2:.5 E2:.5 G2:.5 Bb2:1 r:1"],

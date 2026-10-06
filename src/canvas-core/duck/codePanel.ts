@@ -1,4 +1,4 @@
-// THE CODE PANEL. Deliberately NOT hand-drawn: a clean dark editor card floating on the pond, the
+// THE CODE PANEL. Deliberately NOT hand-drawn (muted colours to sit with the crayon): a clean dark editor card floating on the pond, the
 // way the reference video does it. Monospace, syntax colours, the running line lit by a soft bar
 // with a yellow tick in the gutter, a watch strip of live variables, and a console line.
 import { Gfx, type P } from "../core";
@@ -6,7 +6,7 @@ import { fillShape, clipped } from "../gallery";
 import { FONT_MONO, roundRect, text, measure } from "./kit";
 
 export const CODE = {
-  BG: "#141a2c", EDGE: "#2a3350", TEXT: "#d9e1f2", DIM: "#6c7899", KW: "#ff7ab8", FN: "#ffd23a", NUM: "#ffa25c", BUILTIN: "#7fd6ff", OP: "#a9b6d6", HL: "#ffd23a",
+  BG: "#1d222c", EDGE: "#323a48", TEXT: "#d3d8df", DIM: "#6d7685", KW: "#d98aa3", FN: "#dcb65a", NUM: "#d99a6c", BUILTIN: "#89b9cf", OP: "#a3acb9", HL: "#dcb65a",
 };
 const KEYWORDS = new Set(["def", "for", "in", "if", "else", "elif", "return", "while", "not", "and", "or", "None", "True", "False", "class", "break", "continue"]);
 const BUILTINS = new Set(["print", "enumerate", "range", "len", "dict", "list", "set", "min", "max", "sorted"]);
@@ -41,11 +41,11 @@ export const panelHeight = (lines: string[], L: PanelLayout) => L.pad * 2 + 34 +
 export const drawPanel = (g: Gfx, lines: string[], L: PanelLayout, s: PanelState) => {
   const H = panelHeight(lines, L), card = roundRect(L.x, L.y, L.w, H, 30, 6);
   g.group("plain", () => {
-    fillShape(g, roundRect(L.x + 6, L.y + 14, L.w, H, 30, 6), "#0b2a3d", 0.35); // its shadow on the water
+    fillShape(g, roundRect(L.x + 6, L.y + 14, L.w, H, 30, 6), "#22343c", 0.35); // its shadow on the water
     fillShape(g, card, CODE.BG, 0.94);
     clipped(g, card, () => {
       // three window dots, like an editor
-      ["#ff6b6b", "#ffd23a", "#5fd38d"].forEach((c, i) => fillShape(g, roundRect(L.x + 28 + i * 26, L.y + 22, 14, 14, 7, 3), c, 0.9));
+      ["#c96a62", "#d4b05a", "#7fae7c"].forEach((c, i) => fillShape(g, roundRect(L.x + 28 + i * 26, L.y + 22, 14, 14, 7, 3), c, 0.9));
       text(g, "two_sum.py", L.x + L.w / 2, L.y + 30, { size: 22, weight: 500, family: FONT_MONO, fill: CODE.DIM });
       const top = L.y + L.pad + 34;
       // the running line's bar
@@ -66,8 +66,8 @@ export const drawPanel = (g: Gfx, lines: string[], L: PanelLayout, s: PanelState
       let cx = L.x + 32;
       (s.watch ?? []).forEach(([k, v]) => {
         const label = `${k} = ${v}`, w = measure(g, label, 26, 500, FONT_MONO) + 28, fresh = s.watchFresh === k ? (s.flash ?? 0) : 0;
-        fillShape(g, roundRect(cx, wy + 6, w, 44, 14, 4), fresh > 0 ? mixHex("#24304f", "#ffd23a", fresh * 0.85) : "#24304f");
-        text(g, label, cx + 14, wy + 29, { size: 26, weight: 500, family: FONT_MONO, fill: fresh > 0.5 ? "#141a2c" : CODE.TEXT, align: "left" });
+        fillShape(g, roundRect(cx, wy + 6, w, 44, 14, 4), fresh > 0 ? mixHex("#2b3240", "#dcb65a", fresh * 0.85) : "#2b3240");
+        text(g, label, cx + 14, wy + 29, { size: 26, weight: 500, family: FONT_MONO, fill: fresh > 0.5 ? "#1d222c" : CODE.TEXT, align: "left" });
         cx += w + 14;
       });
       // the console
@@ -75,7 +75,7 @@ export const drawPanel = (g: Gfx, lines: string[], L: PanelLayout, s: PanelState
       text(g, ">>>", L.x + 32, oy, { size: 26, weight: 700, family: FONT_MONO, fill: CODE.DIM, align: "left" });
       if (s.output && (s.outQ ?? 0) > 0) {
         const n = Math.ceil(s.output.length * Math.min(1, s.outQ ?? 0));
-        text(g, s.output.slice(0, n), L.x + 100, oy, { size: 28, weight: 700, family: FONT_MONO, fill: "#5fd38d", align: "left" });
+        text(g, s.output.slice(0, n), L.x + 100, oy, { size: 28, weight: 700, family: FONT_MONO, fill: "#9cc792", align: "left" });
       }
     });
     // a thin rim, like glass

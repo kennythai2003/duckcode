@@ -1,16 +1,14 @@
-// DUCKCODE KIT. Shared palette, easing, text and small marker-comic helpers for the duck films.
-// Marker comic (koi.ts is the plate): flat cel fills, a hard shadow shape on the side away from
-// the light, gel-pen whites, and one heavy brush-pen contour that thickens away from the light.
-// Light from the upper left, always.
+// DUCKCODE KIT. Easing, lettering and geometry shared by the duck films (the crayon hand is in
+// crayon.ts). Light from the upper left, always.
 import { Gfx, type P } from "../core";
 import { clamp, ink, type InkOpts } from "../gallery";
 
-export const INK = "#1a1530";
+export const INK = "#3a302b";
 export const LIGHT: P = [-0.62, -0.78];
-export const FONT_ROUND = "Fredoka", FONT_MONO = "JetBrains Mono";
+export const FONT_ROUND = "Space Grotesk", FONT_MONO = "JetBrains Mono";
 export const FONTS = {
-  "Fredoka:500": "assets/fonts/fredoka-latin-500-normal.woff2",
-  "Fredoka:700": "assets/fonts/fredoka-latin-700-normal.woff2",
+  "Space Grotesk:500": "assets/fonts/space-grotesk-latin-500-normal.woff2",
+  "Space Grotesk:700": "assets/fonts/space-grotesk-latin-700-normal.woff2",
   "JetBrains Mono:500": "assets/fonts/jetbrains-mono-latin-500-normal.woff2",
   "JetBrains Mono:700": "assets/fonts/jetbrains-mono-latin-700-normal.woff2",
 };

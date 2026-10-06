@@ -1,120 +1,144 @@
-// FX · marker comic props for the duck films: speech bubbles, the "seen" signpost, the magnifier,
-// sparkles, hearts, a comic burst, splashes and index tags. Each is drawn whole, in the same hand.
-import { Gfx, rng, type P } from "../core";
-import { clipped, fillShape, mix, smooth } from "../gallery";
-import { INK, LIGHT, contour, ellipse, roundRect, shift, stroke, text, measure } from "./kit";
+// FX · crayon props for the duck films: speech bubbles, the "seen" signpost, the magnifier, the
+// lily-pad entries, sparkles, a check mark, splashes, index tags, water rings and the answer card.
+// Anything that pops or moves is a sprite drawn once and blitted, so its wax never swims.
+import { Gfx, rng, type Ctx, type Env, type P } from "../core";
+import { fillShape, smooth } from "../gallery";
+import { C, PAPER, blit, cline, closed, crayonShape, darker, scribble, sprite, wax } from "./crayon";
+import { ellipse, measure, roundRect, text } from "./kit";
+import { padShapeP } from "./pond";
 
-// a comic speech bubble: rounded box, a tail to the speaker, white flat with a pale shade side.
-// parts: [string, colour][] so a result can be picked out in colour.
-export const bubble = (g: Gfx, cx: number, cy: number, parts: [string, string][], to: P, q: number, seed: number, size = 40) => {
+export type Parts = [string, string][];
+const key = (parts: Parts) => parts.map((p) => p.join("|")).join("~");
+
+// a speech bubble: a paper box worked over with a pale crayon, the contour twice, a tail to the speaker
+export const drawBubble = (ctx: Ctx, env: Env, cx: number, cy: number, parts: Parts, to: P, q: number, seed: number, size = 38) => {
   if (q <= 0) return;
-  const s = Math.max(0.01, q), full = parts.map((p) => p[0]).join(""), w = measure(g, full, size, 700) + 56, h = size + 44;
-  const x0 = cx - w / 2, y0 = cy - h / 2, box = roundRect(x0, y0, w, h, 26, 6);
-  const tx = Math.max(x0 + 40, Math.min(x0 + w - 40, to[0]));
-  const tail: P[] = [[tx - 18, y0 + h - 4], [to[0], to[1]], [tx + 16, y0 + h - 4]];
-  const sc = (pts: P[]) => pts.map(([x, y]) => [cx + (x - cx) * s, cy + (y - cy) * s] as P);
-  g.group("plain", () => {
-    const body = sc(box), tl = sc(tail);
-    fillShape(g, shift(body, 6, 9), "#0b2a3d", 0.25);
-    fillShape(g, tl, INK); fillShape(g, body, "#e3ecf5"); clipped(g, body, () => fillShape(g, shift(body, -8, -8), "#ffffff"));
-    contour(g, body, 6 * s, seed);
-    fillShape(g, sc([[tx - 12, y0 + h - 8], [to[0] + (tx - to[0]) * 0.25, to[1] - 14], [tx + 10, y0 + h - 8]]), "#ffffff");
-    stroke(g, sc([[tx - 16, y0 + h - 2], [to[0], to[1]]]), 5 * s, seed + 1, { taper: [0.05, 0.6] });
-    stroke(g, sc([[tx + 16, y0 + h - 2], [to[0], to[1]]]), 5 * s, seed + 2, { taper: [0.05, 0.6] });
-    let x = cx - (measure(g, full, size * s, 700)) / 2;
-    parts.forEach(([t, col]) => { text(g, t, x, cy + 2 * s, { size: size * s, weight: 700, fill: col, align: "left" }); x += measure(g, t, size * s, 700); });
+  const tdx = Math.round(to[0] - cx), tdy = Math.round(to[1] - cy);
+  const s = sprite(env, `bubble:${key(parts)}:${tdx}:${tdy}:${size}`, 900, 400, 450, 160, (g) => {
+    const full = parts.map((p) => p[0]).join(""), w = measure(g, full, size, 700) + 60, h = size + 46, x0 = -w / 2, y0 = -h / 2;
+    const tx = Math.max(x0 + 40, Math.min(x0 + w - 40, tdx));
+    const box = roundRect(x0, y0, w, h, 22, 6), tail: P[] = [[tx - 16, y0 + h - 2], [tdx, tdy], [tx + 14, y0 + h - 2]];
+    wax(g, () => {
+      fillShape(g, box.map(([x, y]) => [x + 6, y + 9] as P), C.deepest, 0.25);
+      fillShape(g, tail, "#f4ecdb"); fillShape(g, box, "#f4ecdb");
+      scribble(g, box, "#e2d6bd", { angle: 0.5, gap: 7, w: 4.5, alpha: 0.5, seed, keep: (x, y) => x * 0.004 + y * 0.03 > 0.2 });
+      cline(g, closed(box, 2), C.ink, 2.6, seed + 1, 0.92, 0.6);
+      cline(g, [[tx - 16, y0 + h - 1], [tdx, tdy]], C.ink, 2.4, seed + 2, 0.92, 0.4); cline(g, [[tx + 14, y0 + h - 1], [tdx, tdy]], C.ink, 2.4, seed + 3, 0.92, 0.4);
+    });
+    let x = -measure(g, full, size, 700) / 2;
+    parts.forEach(([t, col]) => { text(g, t, x, 2, { size, weight: 700, fill: col, align: "left" }); x += measure(g, t, size, 700); });
   });
+  blit(ctx, env, s, cx, cy, q, q);
 };
 
 // the dictionary's signpost: a little wooden board on a post, stuck in the pond
-export const signpost = (g: Gfx, x: number, y: number, label: string, q: number, seed: number) => {
-  if (q <= 0) return;
-  const s = q, R = (px: number, py: number): P => [x + px * s, y + py * s];
-  g.group("plain", () => {
-    const post = [R(-8, -10), R(8, -10), R(8, 70), R(-8, 70)];
-    fillShape(g, post, "#8a5a3c"); contour(g, post, 4 * s, seed);
-    const board = roundRect(x - 86 * s, y - 64 * s, 172 * s, 70 * s, 12 * s, 4);
-    fillShape(g, board, "#b8773f"); clipped(g, board, () => fillShape(g, shift(board, -8, -8), "#d99a5c"));
-    [[-70, -40, 40], [10, -18, 54]].forEach(([a, b, l], i) => stroke(g, [R(a, b), R(a + l, b + 2)], 2.6 * s, seed + 5 + i, { shadow: 0 }, "#9a5f30", 0.7));
-    contour(g, board, 5.5 * s, seed + 1);
-    text(g, label, x, y - 28 * s, { size: 38 * s, weight: 700, fill: "#fff7e6", stroke: INK, sw: 7 * s });
-    const rip = ellipse(x, y + 70 * s, 22 * s, 6 * s, 18);
-    stroke(g, [...rip, rip[0]], 3, seed + 9, { shadow: 0, taper: [0.3, 0.3] }, "#e8fbff", 0.8);
+export const drawSign = (ctx: Ctx, env: Env, x: number, y: number, label: string, q: number) => {
+  const s = sprite(env, `sign:${label}`, 220, 190, 110, 100, (g) => {
+    wax(g, () => {
+      cline(g, [[0, -10], [1, 30], [0, 72]], C.woodS, 9, 701, 0.95, 0.3);
+      crayonShape(g, roundRect(-86, -66, 172, 70, 10, 4), { col: C.wood, shade: C.woodS, seed: 702, lw: 2.6 });
+      cline(g, closed(ellipse(0, 74, 22, 6, 18), 1), C.glint, 2, 703, 0.8);
+    });
+    text(g, label, 0, -30, { size: 36, weight: 700, fill: "#f4ecdb" });
   });
+  blit(ctx, env, s, x, y, q, q);
 };
 
 // a magnifying glass, for "is it in there?"
-export const magnifier = (g: Gfx, x: number, y: number, k: number, tilt: number, seed: number) => {
-  const c = Math.cos(tilt), s = Math.sin(tilt), R = (px: number, py: number): P => [x + (px * c - py * s) * k, y + (px * s + py * c) * k];
-  g.group("plain", () => {
-    const handle = smooth([R(30, 30), R(70, 70), R(78, 62), R(38, 22)], true, 3);
-    fillShape(g, handle, "#8a5a3c"); contour(g, handle, 4 * k, seed);
-    const rimO = ellipse(x, y, 44 * k, 44 * k, 30), rimI = ellipse(x, y, 34 * k, 34 * k, 30);
-    fillShape(g, rimO, "#7d86a8"); fillShape(g, rimI, "#d7f3ff", 0.55);
-    clipped(g, rimI, () => stroke(g, [R(-22, -10), R(-10, -24)], 6 * k, seed + 2, { shadow: 0 }, "#ffffff", 0.9));
-    contour(g, rimO, 5 * k, seed + 3); contour(g, rimI, 3.5 * k, seed + 4);
+export const drawMagnifier = (ctx: Ctx, env: Env, x: number, y: number, q: number, rot = -0.3) => {
+  const s = sprite(env, "magnifier", 200, 200, 70, 70, (g) => {
+    wax(g, () => {
+      const handle = smooth([[30, 30], [72, 72], [80, 64], [38, 22]], true, 3);
+      crayonShape(g, handle, { col: C.wood, shade: C.woodS, seed: 1501, lw: 2.2, gap: 3.6, w: 4 });
+      const rimO = ellipse(0, 0, 46, 46, 34), lens = ellipse(0, 0, 35, 35, 30);
+      crayonShape(g, rimO, { col: "#8c8f96", shade: "#5f6168", seed: 1502, lw: 2.4, gap: 3.6, w: 4.4 });
+      fillShape(g, lens, "#dfe9e8"); scribble(g, lens, "#c3d6d8", { angle: 0.8, gap: 6, w: 4, alpha: 0.5, seed: 1503, keep: (x, y) => x + y > 0 });
+      cline(g, [[-20, -8], [-8, -22]], "#fbf7ec", 3.4, 1504, 0.9, 0.3); cline(g, closed(lens, 2), C.ink, 1.8, 1505, 0.85, 0.4);
+    });
   });
+  blit(ctx, env, s, x, y, q, q, rot + 0.3);
 };
 
-// a 4-point sparkle star, gel-pen white with an ink edge
-export const sparkle = (g: Gfx, x: number, y: number, r: number, seed: number, col = "#fff6b0") => {
+// a lily pad holding one dictionary entry ("2 : 0")
+export const drawEntry = (ctx: Ctx, env: Env, x: number, y: number, label: string, q: number, glow = 0, seed = 800) => {
+  const pad = (col: string, k: string) => sprite(env, `entry:${label}:${k}`, 260, 140, 130, 60, (g) => {
+    const pts = padShapeP(0, 0, 96, 40, 2.4);
+    wax(g, () => {
+      fillShape(g, pts.map(([px, py]) => [px + 5, py + 9] as P), C.deepest, 0.3);
+      crayonShape(g, pts, { col, shade: C.padS, seed, lw: 2.4, gap: 4.4, w: 5, every: 2 });
+    });
+    text(g, label, -6, -2, { size: 38, weight: 700, fill: "#f4ecdb", stroke: C.ink, sw: 4 });
+  });
+  blit(ctx, env, pad(C.pad, "plain"), x, y, q, q);
+  if (glow > 0) blit(ctx, env, pad("#c9b45a", "gold"), x, y, q, q, 0, glow);
+};
+
+// a four-point crayon sparkle
+export const drawSparkle = (ctx: Ctx, env: Env, x: number, y: number, r: number, rot = 0) => {
   if (r <= 0.5) return;
-  const pts: P[] = []; for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2 - Math.PI / 2, rr = i % 2 ? r * 0.32 : r; pts.push([x + Math.cos(a) * rr, y + Math.sin(a) * rr]); }
-  g.group("plain", () => { const s = smooth(pts, true, 3); fillShape(g, s, col); contour(g, s, Math.max(2, r * 0.12), seed); });
-};
-
-export const heartShape = (cx: number, cy: number, s: number): P[] => Array.from({ length: 24 }, (_, i) => { const t = (i / 24) * Math.PI * 2; return [cx + s * Math.pow(Math.sin(t), 3), cy - (s * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t))) / 16] as P; });
-export const heart = (g: Gfx, x: number, y: number, s: number, seed: number, alpha = 1) => {
-  if (s <= 0.5 || alpha <= 0) return;
-  g.group("plain", () => { const h = heartShape(x, y, s); fillShape(g, h, "#e8456f"); clipped(g, h, () => fillShape(g, shift(h, -s * 0.18, -s * 0.18), "#ff6f93")); stroke(g, [[x - s * 0.5, y - s * 0.4], [x - s * 0.25, y - s * 0.6]], s * 0.14, seed + 1, { shadow: 0 }, "#ffffff", 0.9); contour(g, h, Math.max(2.5, s * 0.14), seed); }, { alpha });
-};
-
-// a comic burst: the jagged star a comic shouts in
-export const burst = (g: Gfx, cx: number, cy: number, rx: number, ry: number, q: number, seed: number, col = "#ffd23a") => {
-  if (q <= 0) return;
-  const r = rng(seed), pts: P[] = [], n = 22;
-  for (let i = 0; i < n; i++) { const a = (i / n) * Math.PI * 2, k = (i % 2 ? 0.78 : 1.06 + r() * 0.12) * q; pts.push([cx + Math.cos(a) * rx * k, cy + Math.sin(a) * ry * k]); }
-  g.group("plain", () => {
-    fillShape(g, shift(pts, 8, 12), "#0b2a3d", 0.25);
-    fillShape(g, pts, mix(col, "#e0761b", 0.5)); clipped(g, pts, () => fillShape(g, shift(pts, LIGHT[0] * 16, LIGHT[1] * 16), col));
-    contour(g, pts, 7 * q, seed + 1, { min: 0.5 });
+  const s = sprite(env, "sparkle", 80, 80, 40, 40, (g) => {
+    const pts: P[] = []; for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2 - Math.PI / 2, rr = i % 2 ? 9 : 30; pts.push([Math.cos(a) * rr, Math.sin(a) * rr]); }
+    wax(g, () => crayonShape(g, smooth(pts, true, 3), { col: "#e3c66f", shade: darker("#e3c66f", 0.25), seed: 1620, lw: 1.8, gap: 3.2, w: 3.6, every: 1 }));
   });
+  blit(ctx, env, s, x, y, r / 30, r / 30, rot);
 };
 
-// a splash: droplets thrown up and out from where something hit the water, then fallen back
+// a check mark, crayon green, for "found it"
+export const drawCheck = (ctx: Ctx, env: Env, x: number, y: number, q: number) => {
+  const s = sprite(env, "check", 120, 120, 60, 60, (g) => wax(g, () => { cline(g, [[-34, 0], [-12, 26], [36, -32]], darker(C.teal, 0.25), 13, 1630, 0.95, 0.6); cline(g, [[-34, 0], [-12, 26], [36, -32]], C.teal, 8, 1631, 0.95, 0.6); }));
+  blit(ctx, env, s, x, y, q, q);
+};
+// a cross, for "not there"
+export const drawCross = (ctx: Ctx, env: Env, x: number, y: number, q: number) => {
+  const s = sprite(env, "cross", 110, 110, 55, 55, (g) => wax(g, () => { cline(g, [[-26, -26], [26, 26]], C.rose, 9, 1640, 0.9, 0.6); cline(g, [[26, -26], [-26, 26]], C.rose, 9, 1641, 0.9, 0.6); }));
+  blit(ctx, env, s, x, y, q, q);
+};
+
+// a splash: pale droplets thrown up and out, a ring spreading on the skin
 export const splash = (g: Gfx, x: number, y: number, t: number, seed: number, k = 1) => {
   if (t <= 0 || t >= 1) return;
   const r = rng(seed);
   g.group("plain", () => {
-    // the ring spreading on the skin
-    const ring = ellipse(x, y, (40 + 110 * t) * k, (8 + 22 * t) * k, 30);
-    stroke(g, [...ring, ring[0]], 5 * (1 - t) * k + 1, seed + 1, { shadow: 0, taper: [0.3, 0.3] }, "#f3fdff", 1 - t);
-    for (let i = 0; i < 9; i++) {
-      const a = -Math.PI / 2 + (r() - 0.5) * 2.2, v = (90 + r() * 70) * k, px = x + Math.cos(a) * v * t * 1.1, py = y + Math.sin(a) * v * t * 1.6 + 260 * t * t * k, rr = (7 + r() * 6) * (1 - t * 0.6) * k;
-      const d = ellipse(px, py, rr, rr * 1.15, 12);
-      fillShape(g, d, "#d9f6ff"); contour(g, d, 2.6 * k, seed + 10 + i);
+    cline(g, closed(ellipse(x, y, (40 + 110 * t) * k, (8 + 22 * t) * k, 30), 1), C.glint, (4 * (1 - t) + 1) * k, seed + 1, 0.9 * (1 - t), 0.5);
+    for (let i = 0; i < 8; i++) {
+      const a = -Math.PI / 2 + (r() - 0.5) * 2.2, v = (90 + r() * 70) * k, px = x + Math.cos(a) * v * t * 1.1, py = y + Math.sin(a) * v * t * 1.6 + 260 * t * t * k, rr = (6 + r() * 5) * (1 - t * 0.6) * k;
+      fillShape(g, ellipse(px, py, rr, rr * 1.15, 12), "#dbe7e4", 0.9); cline(g, closed(ellipse(px, py, rr, rr * 1.15, 12), 1), C.deep, 1.2, seed + 10 + i, 0.7, 0.2);
     }
-  });
+  }, { textures: ["pencilTooth"] });
 };
 
-// an index tag under a duck: a little round plaque floating on the water
-export const indexTag = (g: Gfx, x: number, y: number, s: string, seed: number, hot = 0) => {
-  g.group("plain", () => {
-    const w = 46, b = roundRect(x - w / 2, y - 20, w, 40, 14, 4);
-    fillShape(g, b, hot > 0 ? mix("#1f6f8f", "#ff5fa2", hot) : "#1f6f8f", 0.9);
-    contour(g, b, 3.5, seed);
-    text(g, s, x, y + 1, { size: 26, weight: 700, fill: "#ffffff" });
+// an index tag under a duck: a small plaque floating on the water
+export const drawTag = (ctx: Ctx, env: Env, x: number, y: number, label: string, q: number, hot = 0) => {
+  const tag = (col: string, k: string) => sprite(env, `tag:${label}:${k}`, 90, 70, 45, 35, (g) => {
+    wax(g, () => crayonShape(g, roundRect(-23, -19, 46, 38, 12, 4), { col, shade: darker(col, 0.3), seed: 600, lw: 2, gap: 3.6, w: 4 }));
+    text(g, label, 0, 1, { size: 24, weight: 700, fill: "#f6f0e2" });
   });
+  blit(ctx, env, tag(C.deep, "cold"), x, y, q, q);
+  if (hot > 0) blit(ctx, env, tag(C.gold, "hot"), x, y, q, q, 0, hot);
 };
 
-// a ring on the water around a duck: the reference's state marker (current, seen, answer)
+// a ring on the water around a duck: rose = the duck being asked, teal = asked, gold = the answer
 export const waterRing = (g: Gfx, x: number, y: number, k: number, col: string, q: number, seed: number) => {
   if (q <= 0) return;
   g.group("plain", () => {
-    const o = ellipse(x, y, 118 * k * (0.8 + 0.2 * q), 24 * k * (0.8 + 0.2 * q), 40), i = ellipse(x, y, 98 * k * (0.8 + 0.2 * q), 16 * k * (0.8 + 0.2 * q), 40);
-    const ring: P[] = [...o, o[0], ...[...i, i[0]].reverse()];
-    const c = g.cur; c.save(); c.globalAlpha = q; c.fillStyle = col; c.beginPath(); ring.forEach(([px, py], j) => (j ? c.lineTo(px, py) : c.moveTo(px, py))); c.closePath(); c.fill("evenodd"); c.restore();
-    g.touch(x - 130 * k, y - 30 * k, x + 130 * k, y + 30 * k);
-    contour(g, o, 3 * k, seed, {}, INK, q); contour(g, i, 2.4 * k, seed + 1, {}, INK, q);
-  });
+    const o = ellipse(x, y, 112 * k * (0.8 + 0.2 * q), 21 * k * (0.8 + 0.2 * q), 40);
+    cline(g, closed(o, 1), col, 9 * k, seed, 0.85, 0.5);
+    cline(g, closed(o, 1), darker(col, 0.3), 2.4 * k, seed + 1, 0.7, 0.8);
+  }, { alpha: q, textures: ["pencilTooth"] });
 };
+
+// the answer card: what the function returns, on a paper card
+export const drawCard = (ctx: Ctx, env: Env, x: number, y: number, title: string, value: string, q: number) => {
+  const s = sprite(env, `card:${title}:${value}`, 520, 260, 260, 130, (g) => {
+    const box = roundRect(-200, -86, 400, 172, 22, 6);
+    wax(g, () => {
+      fillShape(g, box.map(([px, py]) => [px + 8, py + 12] as P), C.deepest, 0.3);
+      crayonShape(g, box, { col: "#f1e6cc", shade: "#d4c4a2", seed: 1800, lw: 2.8, gap: 6, w: 5 });
+      cline(g, [[-150, 50], [-40, 54], [150, 48]], C.gold, 6, 1801, 0.85, 1);
+    });
+    text(g, title, 0, -46, { size: 28, weight: 500, fill: C.inkSoft });
+    text(g, value, 0, 8, { size: 72, weight: 700, fill: C.ink });
+  });
+  blit(ctx, env, s, x, y, q, q);
+};
+export { PAPER };
