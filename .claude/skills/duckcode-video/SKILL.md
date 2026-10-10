@@ -311,3 +311,12 @@ Add `--frames` stills only for the moments you changed. Never re-render the full
   - **Price chart pattern** (maxProfit.ts): bars under the ducks, `barH = 40 + p * 32` (a minimum height so small values stay readable), `buy`/`sell` markers on the bar tops, and a dashed profit line plus an arrow drawn with plain ctx strokes.
   - **Sliding-window pattern** (longestSubstring.ts, charReplacement.ts): a translucent teal rounded band behind the ducks from l to r (plain ctx, not crayon, so it can glide), l/r markers on the index tags, a dict as a row of key cards that glow when read or written, and rose rings on the ducks a replacement would change.
   - Put a ✓/✗ verdict into the note text ("… ?  No"), not at (540, 620): there it lands on a duck's head.
+
+- Batch of 8 (Valid Parentheses, Find Min / Search in Rotated Array, Reverse List, Merge Two Lists, List Cycle, Reorder List, Remove Nth): 1-2 look sheets each, one render queue (`out/q.sh film1 film2 ...` renders, gates and verifies each in turn; run ONE queue at a time, since two waiting queues deadlock on each other).
+  - **Start the simulation at frame 135, not 150**, unless a structure ripples from early on: Valid Parentheses failed dead air at 129-144 (bobbing ducks alone are not enough motion).
+  - **Linked lists** (`duck/list.ts`): `nextArrow(g, a, b, q, col, sag, cut)` draws the real `next` pointers as plain-stroke arrows on the water under the ducks (always drawn from the simulated `next[]`, so a re-aimed pointer glides from its old target to its new one in gold). `drawNone` is the None plaque (also used as a `dummy` plaque). `markersUp(...)` puts pointer markers below the arrows, pointing up, stacking when within 120 px. `drawMarker(..., up = true)` is the upward marker.
+  - Long LeetCode signatures (`Optional[ListNode]`) don't fit the panel: wrap them Black-style (`def f(` / `self, args` / `) -> T:`). Max line length is about 65 chars at size 23, 71 at 21, 74 at 20.
+  - Two lists plus a result (Merge Two Lists): three duck rows at y 660 / 815 / 970 (k 0.55); pointers become coloured rings plus small name pills to the LEFT of the duck (markers collide between rows).
+  - A cycle: the back arrow is a deep sag (0.42) under the row; markers sit ABOVE the ducks there.
+  - Sorted/rotated arrays: bars under the ducks (`barH = 40 + v * unit`), l/m/r markers on the bar tops (side by side, ±64 px, when they share a bar), out-of-range bars drawn at alpha 0.4.
+  - `stagePanel` watch: a value of `""` removes the chip (per-phase variables).

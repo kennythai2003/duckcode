@@ -33,7 +33,7 @@ export const stagePanel = (g: Gfx, f: number, o: PanelSpec) => {
   for (const [f0, l] of o.run) if (f >= f0) { from = line; line = l; at = f0; }
   const off = o.window?.off ?? 0, shown = (from < 0 ? line : lerp(from, line, ease.out(prog(f, at, 8)))) - off;
   const watch = new Map<string, string>(); let fresh = "", freshAt = -99;
-  for (const [f0, k, v] of [...o.watch].sort((a, b) => a[0] - b[0])) if (f >= f0) { if (watch.get(k) !== v) { fresh = k; freshAt = f0; } watch.set(k, v); }
+  for (const [f0, k, v] of [...o.watch].sort((a, b) => a[0] - b[0])) if (f >= f0) { if (v === "") { watch.delete(k); continue; } if (watch.get(k) !== v) { fresh = k; freshAt = f0; } watch.set(k, v); }
   const code = o.window ? o.code.slice(off, off + o.window.view) : o.code;
   drawPanel(g, code, o.layout, {
     line: shown >= -0.5 && shown < code.length ? shown : -1, alpha: prog(f, o.show - 4, 6), lineNo0: off,

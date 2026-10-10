@@ -146,11 +146,12 @@ export { PAPER };
 // a pointer marker for indices on a tape or array (i, j, l, r, lo, hi): a big coloured crayon tag with
 // its name, and an arrow tip pointing down at the cell. Distinct colours per pointer; never a tiny pennant.
 export const MARKER_COL: Record<string, string> = { i: C.rose, j: C.teal, l: C.rose, r: C.teal, lo: C.rose, hi: C.teal, mid: C.gold, k: C.gold };
-export const drawMarker = (ctx: Ctx, env: Env, x: number, tipY: number, name: string, q = 1, col = MARKER_COL[name] ?? C.gold) => {
-  const s = sprite(env, `marker:${name}:${col}`, 120, 130, 60, 104, (g) => {
-    const w = Math.max(56, 26 + name.length * 22), box = roundRect(-w / 2, -96, w, 58, 16, 5), tip: P[] = [[-14, -40], [14, -40], [0, -2]];
+export const drawMarker = (ctx: Ctx, env: Env, x: number, tipY: number, name: string, q = 1, col = MARKER_COL[name] ?? C.gold, up = false) => {
+  const w = Math.max(56, 26 + name.length * 22), sw = Math.max(120, w + 24);
+  const s = sprite(env, `marker:${name}:${col}:${up ? "up" : "down"}`, sw, 130, sw / 2, up ? 26 : 104, (g) => {
+    const d = up ? -1 : 1, box = roundRect(-w / 2, up ? 38 : -96, w, 58, 16, 5), tip: P[] = [[-14, -40 * d], [14, -40 * d], [0, -2 * d]];
     wax(g, () => { crayonShape(g, tip, { col, shade: darker(col, 0.3), seed: 7100, lw: 2.2, gap: 3.4, w: 4, every: 1 }); crayonShape(g, box, { col, shade: darker(col, 0.3), seed: 7101, lw: 2.6, gap: 3.8, w: 4.4 }); });
-    text(g, name, 0, -66, { size: 38, weight: 700, fill: "#f6f0e2", stroke: darker(col, 0.45), sw: 4 });
+    text(g, name, 0, up ? 66 : -66, { size: 38, weight: 700, fill: "#f6f0e2", stroke: darker(col, 0.45), sw: 4 });
   });
   blit(ctx, env, s, x, tipY, q, q);
 };

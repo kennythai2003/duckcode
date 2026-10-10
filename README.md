@@ -17,6 +17,14 @@ LeetCode visualizations where the input is ducks. Each array element is a rubber
 | 121. Best Time to Buy and Sell Stock (Python), `prices = [7, 1, 5, 3, 6, 4]`, 48 s | [`videos/best-time-to-buy-and-sell-stock.mp4`](videos/best-time-to-buy-and-sell-stock.mp4) |
 | 3. Longest Substring Without Repeating Characters (Python), `s = "abcabcbb"`, 64 s | [`videos/longest-substring-without-repeating.mp4`](videos/longest-substring-without-repeating.mp4) |
 | 424. Longest Repeating Character Replacement (Python), `s = "ABAB"`, `k = 2`, 52 s | [`videos/longest-repeating-character-replacement.mp4`](videos/longest-repeating-character-replacement.mp4) |
+| 20. Valid Parentheses (Python), `s = "()[]{}"`, 48 s | [`videos/valid-parentheses.mp4`](videos/valid-parentheses.mp4) |
+| 153. Find Minimum in Rotated Sorted Array (Python), `nums = [4, 5, 6, 7, 0, 1, 2]`, 44 s | [`videos/find-minimum-in-rotated-sorted-array.mp4`](videos/find-minimum-in-rotated-sorted-array.mp4) |
+| 33. Search in Rotated Sorted Array (Python), `nums = [4, 5, 6, 7, 0, 1, 2]`, `target = 0`, 48 s | [`videos/search-in-rotated-sorted-array.mp4`](videos/search-in-rotated-sorted-array.mp4) |
+| 206. Reverse Linked List (Python), `head = [1, 2, 3, 4, 5]`, 60 s | [`videos/reverse-linked-list.mp4`](videos/reverse-linked-list.mp4) |
+| 21. Merge Two Sorted Lists (Python), `list1 = [1, 2, 4]`, `list2 = [1, 3, 4]`, 64 s | [`videos/merge-two-sorted-lists.mp4`](videos/merge-two-sorted-lists.mp4) |
+| 141. Linked List Cycle (Python), `head = [3, 2, 0, -4]`, `pos = 1`, 44 s | [`videos/linked-list-cycle.mp4`](videos/linked-list-cycle.mp4) |
+| 143. Reorder List (Python), `head = [1, 2, 3, 4, 5]`, 68 s | [`videos/reorder-list.mp4`](videos/reorder-list.mp4) |
+| 19. Remove Nth Node From End of List (Python), `head = [1, 2, 3, 4, 5]`, `n = 2`, 44 s | [`videos/remove-nth-node-from-end.mp4`](videos/remove-nth-node-from-end.mp4) |
 
 ## Look
 
@@ -43,6 +51,7 @@ src/canvas-core/duck/      reusable duck kit
   stage.ts                 pond + title + code-panel wiring shared by every film
   sound.ts                 score + effects + quacks mixer (duckSound)
   themes.ts                four rotating channel theme songs (themeFor)
+  list.ts                  linked lists: next arrows, None plaque, upward pointer markers
 src/canvas-core/findMax.ts     the template film: copy it for a new problem
 src/canvas-core/twoSum.ts       the Two Sum film: problem, cue table, choreography
 src/canvas-core/twoSumScore.ts  its score
