@@ -54,7 +54,7 @@ node tools/music.mjs check src/canvas-core/twoSumScore.ts#twoSumScore
 
 ## Adding a problem
 
-To request a video, fill in [`PROMPT_TEMPLATE.md`](PROMPT_TEMPLATE.md) and paste it. The `duckcode-video` skill (`.claude/skills/duckcode-video/SKILL.md`) holds the standing rules: 40-70 s, LeetCode-style code, and multiple rows where they help.
+To request a video, fill in [`PROMPT_TEMPLATE.md`](PROMPT_TEMPLATE.md) and paste it. The `duckcode-video` skill (`.claude/skills/duckcode-video/SKILL.md`) holds the standing rules: 40-90 s, LeetCode-style code, and multiple rows where they help.
 
 By hand:
 

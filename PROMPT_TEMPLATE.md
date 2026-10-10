@@ -15,7 +15,7 @@ class Solution:
 
 Input (optional, as Python literals):
 Expected output (optional):
-Length (optional, default 45-60 s):
+Length (optional, 40-90 s; default: whatever the problem needs):
 Show it as (optional, a metaphor or focus, e.g. "the window is a rope around the ducks",
   "the stack is a tower of lily pads", "spend the most time on the shrink step"):
 Avoid (optional):

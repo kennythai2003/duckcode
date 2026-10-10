@@ -1,6 +1,6 @@
 ---
 name: duckcode-video
-description: Make a new duckcode LeetCode visualization video (rubber ducks as the input, muted crayon style, a clean LeetCode-style code panel, a composed score with effects and quacks, 40-70 s) in this repo, quickly and cheaply. Use whenever the user asks for a new duck video, a new problem, pastes the PROMPT_TEMPLATE, or asks for a change to an existing one.
+description: Make a new duckcode LeetCode visualization video (rubber ducks as the input, muted crayon style, a clean LeetCode-style code panel, a composed score with effects and quacks, 40-90 s) in this repo, quickly and cheaply. Use whenever the user asks for a new duck video, a new problem, pastes the PROMPT_TEMPLATE, or asks for a change to an existing one.
 ---
 
 # duckcode video: the fast path
@@ -12,7 +12,7 @@ repo. Copy the closest existing film (see "Which film to copy").
 
 ## The user's standing rules (hard requirements)
 
-1. **Length: 40-70 s** (1200-2100 frames). Pace it so a viewer can follow every step: no code
+1. **Length: 40-90 s** (1200-2700 frames; let the problem decide: a single loop lands near 45-55 s, nested loops, two phases or many passes can run to 90 s). Pace it so a viewer can follow every step: no code
    line highlighted for less than 1 s (30 frames), every reveal (a key forming, a hit, a regroup)
    held 1.5-2 s (45-60 frames). Faster than this was called "a bit fast".
 2. **Code format, always LeetCode style:** the input line(s) first, then the user's `class
@@ -134,7 +134,7 @@ The pattern is data-driven:
   - The first iteration starts at 120.
 - An iteration takes 4 bars (240 frames) for the first one, then 3 bars (180) for misses, then 3 bars for the hit.
 - Ending: `ret`, then `print` 60 frames later, then `party` 30 frames after that, then 90 frames of hold. Declare it in `meta.holds`.
-- **Length: 40-70 s.** Budget in frames (30 fps):
+- **Length: 40-90 s.** Budget in frames (30 fps):
   - intro 180: the ducks land, the input pill, the call line
   - setup 60-90 per setup line (e.g. `res = ...`, `count = ...`)
   - **first pass 240-300**: walk every inner line at ≥ 30 frames each and hold the reveal 45-60
@@ -156,7 +156,7 @@ Copy `twoSumScore.ts`. Keep these settings:
 - `moodControls: { energy: 0.5, warmth: 0.6, brightness: 0.45, tension: 0.4, space: 0.5 }`
 - `swing: 0.54`, `tail: 1.2`
 
-Bars = frames / 60, so a 40-70 s film is **20-35 bars**. Make the form longer with sections, not with tempo:
+Bars = frames / 60, so a 40-90 s film is **20-45 bars**. Make the form longer with sections, not with tempo:
 - a `verse` per pass group (4-6 bars each)
 - `repeat: 2` on a verse whose lines you also vary with `loopLines`
 - or a second `verse` with new motif variations, so the motif develops instead of looping verbatim
@@ -191,7 +191,7 @@ node tools/still.mjs <film> --frames A,B,C,D 2>&1 | tail -2     # pick: mid-iter
 cd out && ffmpeg -v error -y -i still-<film>-A.png -i still-<film>-B.png -i still-<film>-C.png -i still-<film>-D.png \
   -filter_complex "[0]scale=540:-1[a];[1]scale=540:-1[b];[2]scale=540:-1[c];[3]scale=540:-1[d];[a][b][c][d]hstack=4" sheet.png   # look at ONE image
 node tools/music.mjs check src/canvas-core/<film>Score.ts#<export> 2>&1 | grep -E "FLAG|CRAFT|CHECK|master|cadences"
-node tools/render.mjs <film> 2>&1 | grep -E "audio:|draw median|output|determinism|rror|  #"  # ~2.5 min per 900 frames; 1800 frames ≈ 5-6 min: use run_in_background (or timeout 600000)
+node tools/render.mjs <film> 2>&1 | grep -E "audio:|draw median|output|determinism|rror|  #"  # ~2.5 min per 900 frames; 1800 frames ≈ 5-6 min, 2700 ≈ 8-9 min: always use run_in_background for long films
 node tools/gate.mjs <film> 2>&1 | grep -E "FAIL|GATE:"
 node tools/verify-export.mjs out/<film>.mp4 --film <film> 2>&1 | grep -E "VERIFY-EXPORT:|FAIL"
 ffmpeg -v error -y -i out/<film>.mp4 -vf "select='not(mod(n\,56))',scale=216:-1,tile=8x2" -frames:v 1 out/vsheet.png   # one look at the motion
