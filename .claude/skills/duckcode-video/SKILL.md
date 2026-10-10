@@ -252,6 +252,10 @@ Add `--frames` stills only for the moments you changed. Never re-render the full
   - A one-line "what this line just did" note (e.g. `j = i + length = 6`) at y ~912 between the ducks and the data teaches more than a bubble, and is cheap.
   - Duck labels up to 4 chars now fit (20 px). `drawCard` shrinks long values automatically.
 
+- Product of Array Except Self (52 s): Python check first, 1 music check, 1 look sheet (one fix: a label sat on a lily pad), 1 background render, passed first time.
+  - Pattern: a **carried value as a travelling pill** (`prefix`/`postfix`) that rides under the current cell.
+  - A two-line note: what the line did, plus what the carried value *means* ("prefix = product of everything left of i").
+
 ## Quality bar (unchanged)
 
 - A gate of 15/15, a music `CHECK PASS`, and `VERIFY-EXPORT PASS`.
