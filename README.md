@@ -8,6 +8,7 @@ LeetCode visualizations where the input is ducks. Each array element is a rubber
 | 242. Valid Anagram (Python), `s = "cat"`, `t = "act"`, 30 s | [`videos/valid-anagram.mp4`](videos/valid-anagram.mp4) |
 | 49. Group Anagrams (Python), `strs = ["eat","tea","tan","ate","nat","bat"]`, 30 s | [`videos/group-anagrams.mp4`](videos/group-anagrams.mp4) |
 | 217. Contains Duplicate (Python), `nums = [3, 1, 4, 1, 5]`, 48 s | [`videos/contains-duplicate.mp4`](videos/contains-duplicate.mp4) |
+| 347. Top K Frequent Elements (Python), `nums = [1, 1, 1, 2, 2, 3]`, `k = 2`, 72 s | [`videos/top-k-frequent.mp4`](videos/top-k-frequent.mp4) |
 
 ## Look
 
@@ -37,6 +38,7 @@ src/canvas-core/twoSumSound.ts  score + effect cues + quacks
 src/canvas-core/validAnagram*.ts the Valid Anagram film, score, sound
 src/canvas-core/groupAnagrams*.ts the Group Anagrams film, score, sound
 src/canvas-core/containsDuplicate*.ts the Contains Duplicate film, score, sound
+src/canvas-core/topKFrequent*.ts the Top K Frequent film, score, sound
 assets/fonts/              Space Grotesk (titles) and JetBrains Mono (code), SIL OFL 1.1
 ```
 

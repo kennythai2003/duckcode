@@ -226,6 +226,17 @@ Add `--frames` stills only for the moments you changed. Never re-render the full
 
 - Contains Duplicate (48 s, the first video at the slower pace): 1 music check, 1 look sheet (one fix: clamp the verdict bubble's cx to ≤ 740), 1 background render (~4 min for 1440 frames), passed first time. `containsDuplicateScore.ts` has a `bass("G Em")` root-fifth helper plus `sec(harmony)`; copy those, since they make long forms cheap to write. If the user pastes only the method body, wrap it in `class Solution:` with the LeetCode signature.
 
+- Top K Frequent (72 s, three phases): 2 music checks, 1 look sheet with no fixes, 1 background render (~8 min for 2160 frames), passed first time.
+  - **Vibes chords must stay in F3-F6**: voicings starting on E3 fail craft's range check. Start voicings on F#3 or higher.
+  - 17 code lines fit at `size 22, lh 31`, with the panel at y 1186.
+  - Patterns in topKFrequent.ts:
+    - a multi-phase cue table (`P1`/`P2`/`P3`)
+    - a second pointer walking a row of cells (`iPointer`)
+    - a generic `fly(text, a, b, t0, dur, arc)` helper
+    - the `res` bubble in the sky
+    - `watch.delete()` to retire a chip when the watch strip gets crowded
+  - `loopLines: true` with 2-bar motifs keeps a 36-bar score short to write.
+
 ## Quality bar (unchanged)
 
 - A gate of 15/15, a music `CHECK PASS`, and `VERIFY-EXPORT PASS`.
