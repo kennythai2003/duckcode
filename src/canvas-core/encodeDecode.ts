@@ -199,7 +199,7 @@ const draw = (ctx: Ctx, f: number, env: Env) => {
   // ducks, the s pennant (encode), i and j (decode)
   STRS.forEach((_, i) => { if (drop(f, CUE.land[i]) !== null) drawDuck(ctx, env, g, pose(i, f), f); });
   const sp = sPointer(f); if (sp) drawPointer(ctx, env, sp.at, DUCK_K * 1.1, sp.tilt, "s");
-  const ip = ijAt(f, "i"), jp = ijAt(f, "j"), ijq = 1 - ease.out(prog(f, CUE.ret, 10));
+  const ip = ijAt(f, "i"), jp = ijAt(f, "j"), ijq = 1 - ease.out(prog(f, CUE.print - 10, 10));
   if (ijq > 0 && jp) drawMarker(ctx, env, jp[0], jp[1] + 4 * Math.sin(f * 0.16 + 1.3), "j", 0.92 * ijq);
   if (ijq > 0 && ip) drawMarker(ctx, env, ip[0], ip[1] + 4 * Math.sin(f * 0.16), "i", 0.92 * ijq);
   CUE.land.forEach((l, i) => splash(g, DUCK_X[i], DUCK_Y + 14, (f - l) / 18, 1100 + i, 0.9));
