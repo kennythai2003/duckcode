@@ -13,6 +13,7 @@ LeetCode visualizations where the input is ducks. Each array element is a rubber
 | 238. Product of Array Except Self (Python), `nums = [1, 2, 3, 4]`, 52 s | [`videos/product-except-self.mp4`](videos/product-except-self.mp4) |
 | 128. Longest Consecutive Sequence (Python), `nums = [100, 4, 200, 1, 3, 2]`, 52 s | [`videos/longest-consecutive.mp4`](videos/longest-consecutive.mp4) |
 | 125. Valid Palindrome (Python), `s = "A man, a plan, a canal: Panama"`, 76 s | [`videos/valid-palindrome.mp4`](videos/valid-palindrome.mp4) |
+| 15. 3Sum (Python), `nums = [-1, 0, 1, 2, -1, -4]`, 80 s | [`videos/three-sum.mp4`](videos/three-sum.mp4) |
 
 ## Look
 

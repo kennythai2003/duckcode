@@ -298,3 +298,10 @@ Add `--frames` stills only for the moments you changed. Never re-render the full
 - Text never cut by the frame edge.
 - The code panel's running line always matches what the ducks are doing.
 - Say plainly that you can't hear the audio.
+
+- 3Sum (80 s, 22 code lines): 1 look sheet + 1 crop check, 1 render.
+  - **22 lines fit, all visible**: panel at `y 1086, size 20, lh 28` (panel height = 198 + lines × lh); the structures then live in y 600-1060.
+  - **Three pointers**: pass explicit colours to `drawMarker`: i gold, l rose, r teal (l and i would both be rose by default). Rings under the ducks use the same colours.
+  - **`nums.sort()` on screen**: the ducks are the array; they land in input order and swim to `SLOT[d]` (a stable sort, as Python). Keep the swim hop low (≤ 50 px) or the ducks cover the note.
+  - **The note needs a paper plate** (`#efe6d3`, alpha 0.82, behind the text at NOTE_Y): over the shoreline the sub-line was unreadable.
+  - `drawCard` now shrinks values over 20 chars to 30 px (nested lists).
