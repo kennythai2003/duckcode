@@ -28,7 +28,8 @@ const alnum = (c: string) => /[a-zA-Z0-9]/.test(c);
 type Snap = { f: number; line: number; l: number; r: number; note: string; sub?: string; skip?: number; pair?: [number, number]; verdict?: "yes" | "no" };
 const SIM: Snap[] = (() => {
   const out: Snap[] = []; let f = 300, l = 0, r = N - 1;
-  const at = (line: number, note: string, dur: number, x: Partial<Snap> = {}) => { out.push({ f, line, l, r, note, ...x }); f += dur; };
+  let pairNo = 0; const fast = () => pairNo >= 3 && pairNo <= 8;   // the middle pairs speed up; the first and last slow down again
+  const at = (line: number, note: string, dur: number, x: Partial<Snap> = {}) => { out.push({ f, line, l, r, note, ...x }); f += fast() ? Math.max(15, Math.round(dur / 2 / 15) * 15) : dur; };
   at(3, `l = 0, r = ${N - 1}`, 45);
   let result = true;
   while (l < r) {
@@ -40,7 +41,7 @@ const SIM: Snap[] = (() => {
     const same = S[l].toLowerCase() === S[r].toLowerCase();
     at(9, `'${S[l]}'.lower() = '${S[l].toLowerCase()}'  vs  '${S[r]}'.lower() = '${S[r].toLowerCase()}'`, 45, { verdict: same ? "yes" : "no", sub: same ? "equal: keep going" : "different: not a palindrome" });
     if (!same) { result = false; at(10, "return False", 30); break; }
-    const pair: [number, number] = [l, r]; l += 1; r -= 1; at(11, `l = ${l}, r = ${r}`, 30, { pair });
+    const pair: [number, number] = [l, r]; l += 1; r -= 1; at(11, `l = ${l}, r = ${r}`, 30, { pair }); pairNo += 1;
   }
   if (result) at(4, `l = ${l} is not < r = ${r}: stop`, 30);
   if (result !== EXPECTED) throw new Error("validPalindrome: simulation disagrees with expected");
@@ -96,7 +97,7 @@ const draw = (ctx: Ctx, f: number, env: Env) => {
     const q = ease.spring(prog(f, CUE.tape + c * 3, 14)); if (q <= 0) continue;
     const kind: Kind = f >= CUE.ret && alnum(S[c]) ? "best" : matched(c) ? "match" : skipped(c) ? "skip" : "set";
     const [x, y] = cell(c), cmpLift = s?.line === 9 && (c === s.l || c === s.r) ? 10 * Math.sin(Math.PI * prog(f, s.f, 30)) : 0;
-    blit(ctx, env, cellSprite(env, S[c], kind), x, y - cmpLift, q, q);
+    blit(ctx, env, cellSprite(env, S[c], kind), x, y - cmpLift + 4.5 * Math.sin(f * 0.1 + c * 0.45), q, q);
   }
   g.group("plain", () => { for (let c = 0; c < N; c++) { const [x, y] = cell(c); text(g, String(c), x - 25, y - 21, { size: 13, weight: 700, fill: "#3a302b", align: "left", alpha: 0.6 * prog(f, CUE.tape + c * 3 + 6, 6) }); } });
   // l and r markers (pointer markers, never the head pennant)
@@ -127,7 +128,7 @@ const cues: SfxCue[] = [
   { frame: CUE.print, kind: "impact", variant: "soft", snap: "bar", label: "the answer" },
 ];
 export const validPalindrome: Film = {
-  meta: { title: `${TITLE} · duckcode`, W: 1080, H: 1920, fps: FPS, bpm: BPM, durationFrames: DURATION, kind: "explainer", poster: CMP[5].f + 20, holds: [[CUE.party + 100, DURATION, "the answer, held for reading"]],
+  meta: { title: `${TITLE} · duckcode`, W: 1080, H: 1920, fps: FPS, bpm: BPM, durationFrames: DURATION, kind: "explainer", poster: CMP[5].f + 20, holds: [[CUE.party + 60, DURATION, "the answer, held for reading"]],
     captions: [{ from: CUE.s, to: SIM[0].f, text: `s = "${S}"` }, { from: SIM[0].f, to: CUE.ret, text: "Skip anything that isn't a letter or digit, then compare the two ends." }, { from: CUE.ret, to: DURATION, text: "Output: True" }] },
   assets: { images: {}, fonts: FONTS },
   shots: [{ id: "validPalindrome", start: 0, end: DURATION, draw }],
