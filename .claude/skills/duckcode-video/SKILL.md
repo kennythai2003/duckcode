@@ -28,7 +28,8 @@ repo. Copy the closest existing film (see "Which film to copy").
    - Markers must keep moving: bob them ±4 px (`tipY + 4 * Math.sin(f * 0.16)`). Static markers made the gate fail its dead-air check during 45-frame holds.
    - No text under ~16 px. Leave ≥ 110 px between stacked rows so markers don't cover the row above.
 5. The style, sound and fonts are fixed (crayon, muted, marimba + effects + quacks). Don't ask.
-6. Results go to `videos/<kebab>.mp4` plus a poster, a README row, a commit and a push to the session branch.
+6. **Every video ends with time and space complexity**: use `stageEnd(ctx, env, f, {print, party, title, value, time: ["O(n)", "why"], space: ["O(1)", "why"], y: 520})` from stage.ts. It shows the answer card at `print`, turns it into the complexity card 120 frames later, and adds the sparkles. Budget `DURATION = ceil((RET + 330) / 120) * 120` and hold from `party + 150`. Keep the card title short ("the function returns"); long method names overflow the 400 px card. Fill in an `m` the user leaves blank (e.g. m = distinct characters in s).
+7. Results go to `videos/<kebab>.mp4` plus a poster, a README row, a commit and a push to the session branch.
 
 The user may paste the template from `PROMPT_TEMPLATE.md`. Its fields map 1:1 onto `PROBLEM`, `CODE`, the inputs and the story.
 
@@ -305,3 +306,8 @@ Add `--frames` stills only for the moments you changed. Never re-render the full
   - **`nums.sort()` on screen**: the ducks are the array; they land in input order and swim to `SLOT[d]` (a stable sort, as Python). Keep the swim hop low (≤ 50 px) or the ducks cover the note.
   - **The note needs a paper plate** (`#efe6d3`, alpha 0.82, behind the text at NOTE_Y): over the shoreline the sub-line was unreadable.
   - `drawCard` now shrinks values over 20 chars to 30 px (nested lists).
+
+- Best Time to Buy and Sell Stock (48 s), Longest Substring (64 s), Character Replacement (52 s): made in one batch, 1-2 look sheets each, 1 render each.
+  - **Price chart pattern** (maxProfit.ts): bars under the ducks, `barH = 40 + p * 32` (a minimum height so small values stay readable), `buy`/`sell` markers on the bar tops, and a dashed profit line plus an arrow drawn with plain ctx strokes.
+  - **Sliding-window pattern** (longestSubstring.ts, charReplacement.ts): a translucent teal rounded band behind the ducks from l to r (plain ctx, not crayon, so it can glide), l/r markers on the index tags, a dict as a row of key cards that glow when read or written, and rose rings on the ducks a replacement would change.
+  - Put a ✓/✗ verdict into the note text ("… ?  No"), not at (540, 620): there it lands on a duck's head.

@@ -154,3 +154,22 @@ export const drawMarker = (ctx: Ctx, env: Env, x: number, tipY: number, name: st
   });
   blit(ctx, env, s, x, tipY, q, q);
 };
+
+// the complexity card shown at the end: two columns, Time and Space, each a big O(...) and a short reason
+export type Big = [o: string, why: string];
+export const drawComplexity = (ctx: Ctx, env: Env, x: number, y: number, time: Big, space: Big, q: number) => {
+  const s = sprite(env, `cx:${time.join("|")}:${space.join("|")}`, 900, 240, 450, 120, (g) => {
+    const box = roundRect(-415, -92, 830, 184, 22, 6);
+    wax(g, () => {
+      fillShape(g, box.map(([px, py]) => [px + 8, py + 12] as P), C.deepest, 0.3);
+      crayonShape(g, box, { col: "#f1e6cc", shade: "#d4c4a2", seed: 1850, lw: 2.8, gap: 6, w: 5 });
+      cline(g, [[0, -66], [2, 0], [0, 66]], "#c9b991", 3, 1851, 0.8, 1);
+    });
+    ([["Time", time, -208, C.rose], ["Space", space, 208, C.teal]] as [string, Big, number, string][]).forEach(([h, [o, why], cx, col]) => {
+      text(g, h, cx, -58, { size: 26, weight: 700, fill: col });
+      text(g, o, cx, 0, { size: o.length > 6 ? 46 : 58, weight: 700, fill: C.ink });
+      text(g, why, cx, 54, { size: why.length > 28 ? 19 : 22, weight: 500, fill: C.inkSoft });
+    });
+  });
+  blit(ctx, env, s, x, y, q, q);
+};

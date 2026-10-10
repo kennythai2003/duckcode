@@ -14,6 +14,9 @@ LeetCode visualizations where the input is ducks. Each array element is a rubber
 | 128. Longest Consecutive Sequence (Python), `nums = [100, 4, 200, 1, 3, 2]`, 52 s | [`videos/longest-consecutive.mp4`](videos/longest-consecutive.mp4) |
 | 125. Valid Palindrome (Python), `s = "A man, a plan, a canal: Panama"`, 76 s | [`videos/valid-palindrome.mp4`](videos/valid-palindrome.mp4) |
 | 15. 3Sum (Python), `nums = [-1, 0, 1, 2, -1, -4]`, 80 s | [`videos/three-sum.mp4`](videos/three-sum.mp4) |
+| 121. Best Time to Buy and Sell Stock (Python), `prices = [7, 1, 5, 3, 6, 4]`, 48 s | [`videos/best-time-to-buy-and-sell-stock.mp4`](videos/best-time-to-buy-and-sell-stock.mp4) |
+| 3. Longest Substring Without Repeating Characters (Python), `s = "abcabcbb"`, 64 s | [`videos/longest-substring-without-repeating.mp4`](videos/longest-substring-without-repeating.mp4) |
+| 424. Longest Repeating Character Replacement (Python), `s = "ABAB"`, `k = 2`, 52 s | [`videos/longest-repeating-character-replacement.mp4`](videos/longest-repeating-character-replacement.mp4) |
 
 ## Look
 

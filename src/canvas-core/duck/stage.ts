@@ -7,6 +7,7 @@ import { drawPanel, type PanelLayout } from "./codePanel";
 import { pillSprite, titleSprite } from "./chrome";
 import { ease, prog } from "./kit";
 import { pondPlate, waterGlints } from "./pond";
+import { drawCard, drawComplexity, drawSparkle, type Big } from "./fx";
 
 export const W = 1080, H = 1920;
 export const stageBegin = (ctx: Ctx, env: Env, f: number): Gfx => {
@@ -40,4 +41,14 @@ export const stagePanel = (g: Gfx, f: number, o: PanelSpec) => {
     watch: [...watch.entries()], watchFresh: fresh, flash: 1 - prog(f, freshAt, 14),
     output: o.output, outQ: prog(f, o.print + 4, 12),
   });
+};
+
+// the ending every film shares: the answer card at `print`, which turns into the complexity card two
+// seconds later (it stays to the end), with sparkles from `party`. Budget DURATION >= ret + 330.
+export const stageEnd = (ctx: Ctx, env: Env, f: number, o: { print: number; party: number; title: string; value: string; time: Big; space: Big; y?: number }) => {
+  const y = o.y ?? 545, swap = o.print + 120;
+  const aq = ease.spring(prog(f, o.print, 24)) * (1 - ease.inOut(prog(f, swap, 10)));
+  if (aq > 0.01) drawCard(ctx, env, 540, y, o.title, o.value, aq);
+  const cq = ease.spring(prog(f, swap + 4, 24)); if (cq > 0) drawComplexity(ctx, env, 540, y, o.time, o.space, cq);
+  if (f >= o.party) for (let k = 0; k < 6; k++) { const a = (k / 6) * Math.PI * 2 + (f - o.party) * 0.025, rx = f >= swap ? 450 : 290; drawSparkle(ctx, env, 540 + Math.cos(a) * rx, y + Math.sin(a) * 125, 13 + 4 * Math.sin(f * 0.3 + k), a); }
 };
