@@ -165,6 +165,12 @@ Add `--frames` stills only for the moments you changed. Never re-render the full
 
 - Valid Anagram, the first video made with this skill: 1 music check, 1 look sheet (with one fix: the panel tab name), 1 render, 1 gate, 1 verify. The only advisory was the ghost snare being too quiet with the `shuffle` groove; `levels.ghost: 6` fixes it.
 
+- Group Anagrams: 1 music check, 1 look sheet, 2 renders. The first render failed because two soft `tick` cues were buried under the score (filmSfx throws). **Start `tick:soft` cues at `gainDb: 3`-`5`.** The `bounce` groove also wants `levels: { ghost: 6, hat: -3 }`. New reusable patterns are in groupAnagrams.ts:
+  - a 26-cell count strip made of cell sprites (one sprite per count value)
+  - bucket cards for dictionary entries with list values
+  - a final "regroup" where the ducks swim to new x positions (`duckX(i, f)`)
+  - long signatures (`def f(self, x: List[str]) -> ...`) fit at `size 23, lh 34`
+
 ## Quality bar (unchanged)
 
 - A gate of 15/15, a music `CHECK PASS`, and `VERIFY-EXPORT PASS`.

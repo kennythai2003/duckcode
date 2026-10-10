@@ -6,6 +6,7 @@ LeetCode visualizations where the input is ducks. Each array element is a rubber
 |---|---|
 | 1. Two Sum (Python), `nums = [2, 11, 7, 15]`, `target = 9`, 30 s | [`videos/two-sum.mp4`](videos/two-sum.mp4) |
 | 242. Valid Anagram (Python), `s = "cat"`, `t = "act"`, 30 s | [`videos/valid-anagram.mp4`](videos/valid-anagram.mp4) |
+| 49. Group Anagrams (Python), `strs = ["eat","tea","tan","ate","nat","bat"]`, 30 s | [`videos/group-anagrams.mp4`](videos/group-anagrams.mp4) |
 
 ## Look
 
@@ -33,6 +34,7 @@ src/canvas-core/twoSum.ts       the Two Sum film: problem, cue table, choreograp
 src/canvas-core/twoSumScore.ts  its score
 src/canvas-core/twoSumSound.ts  score + effect cues + quacks
 src/canvas-core/validAnagram*.ts the Valid Anagram film, score, sound
+src/canvas-core/groupAnagrams*.ts the Group Anagrams film, score, sound
 assets/fonts/              Space Grotesk (titles) and JetBrains Mono (code), SIL OFL 1.1
 ```
 
