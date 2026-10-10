@@ -1,6 +1,6 @@
 ---
 name: duckcode-video
-description: Make a new duckcode LeetCode visualization video (rubber ducks as the input, muted crayon style, a clean code panel, a composed score with effects and quacks) in this repo, quickly and cheaply. Use whenever the user asks for a new duck video, a new problem, or a change to an existing one.
+description: Make a new duckcode LeetCode visualization video (rubber ducks as the input, muted crayon style, a clean LeetCode-style code panel, a composed score with effects and quacks, 40-70 s) in this repo, quickly and cheaply. Use whenever the user asks for a new duck video, a new problem, pastes the PROMPT_TEMPLATE, or asks for a change to an existing one.
 ---
 
 # duckcode video: the fast path
@@ -8,7 +8,22 @@ description: Make a new duckcode LeetCode visualization video (rubber ducks as t
 The style is **settled** and the user approved it: muted crayon, a clean dark code panel, Space
 Grotesk and JetBrains Mono, a playful marimba score, kit effects plus our own quack. **Do not ask
 style questions again, and do not re-explore anidoodle.** Everything you need is already in this
-repo. Two Sum (`src/canvas-core/twoSum.ts`) is the template.
+repo. Copy the closest existing film (see "Which film to copy").
+
+## The user's standing rules (hard requirements)
+
+1. **Length: 40-70 s** (1200-2100 frames). Pace it so a viewer can follow every step: no code
+   line highlighted for less than 1 s (30 frames), every reveal (a key forming, a hit, a regroup)
+   held 1.5-2 s (45-60 frames). Faster than this was called "a bit fast".
+2. **Code format, always LeetCode style:** the input line(s) first, then the user's `class
+   Solution:` verbatim, then `print(Solution().<method>(<args>))`. No blank lines (they waste
+   panel rows). Use the user's code exactly as pasted; only add the input line(s) and the print.
+3. **Multiple rows are fine and preferred over cramming.** Ducks may sit in 2 rows. Long strips
+   (the alphabet, a big array, a grid) may wrap into 2 rows. Never shrink text below ~20 px to fit one row.
+4. The style, sound and fonts are fixed (crayon, muted, marimba + effects + quacks). Don't ask.
+5. Results go to `videos/<kebab>.mp4` plus a poster, a README row, a commit and a push to the session branch.
+
+The user may paste the template from `PROMPT_TEMPLATE.md`. Its fields map 1:1 onto `PROBLEM`, `CODE`, the inputs and the story.
 
 ## What NOT to do (the waste in the first two videos)
 
@@ -69,6 +84,18 @@ Target budget for a new problem: **~1 look sheet, 1 full render, 1 music check, 
 
 **Sprite keys must change when the content changes** (the label, the text, the tail offset). `drawBubble` keys on its text and on the rounded tail offset. Keep the tail offset constant relative to the bubble (`[mx + 60, my + 6]` from `cx = mx + 250, cy = my + 12`). That stops the cache growing every frame.
 
+## Screen zones (1080×1920)
+
+| Zone | y range | Holds |
+|---|---|---|
+| Title | 180-470 | title sprite (540, 270), input pill (540, 432) |
+| Duck rows | 600-940 | 1 row at `DUCK_Y 820-830`, or 2 rows at **y 740 and 900, k 0.6**, 6 per row, x from 110 every 172 |
+| Data structures | 950-1180 | one strip or row of cards; or **two rows at y 985 and 1060**, with cards at 1130 |
+| Code panel | 1196-1900 | up to 15 code lines at `size 23, lh 34` |
+
+If both the ducks and the structures need 2 rows, move the panel down to `y 1240` with `lh 32`
+(14 lines max), or drop the index tags (state is already shown by rings).
+
 ## Proven layout (1080×1920, 30 fps, 120 bpm: a beat is 15 frames, a bar 60)
 
 | Thing | Value |
@@ -81,10 +108,20 @@ Target budget for a new problem: **~1 look sheet, 1 full render, 1 music check, 
 | Speech bubble over a duck | cy 600, cx clamped to [260, 820], tail to (headTop.x + 40, 680) |
 | Verdict bubble near the magnifier | `cx = mx + 250..260, cy = my + 12`, magnifier at `my = PAD_Y - 96` |
 | Answer card | (540, 540) |
-| Code panel | `{x: 46, y: 1196, w: 988, size: 29, lh: 40, pad: 18}`. It holds **12 code lines** plus the watch strip and the console. For 13-14 lines use `lh 36, size 27`. For more, trim blank lines and the `print` call before shrinking further. |
+| Code panel | `{x: 46, y: 1196, w: 988, size: 29, lh: 40, pad: 18}` holds 12 lines; `size 27, lh 36` holds 14; **`size 23, lh 34` holds 15 and fits a typed LeetCode signature (~64 chars)**. With `class Solution:` you are almost always at 10-15 lines, so start at `size 23, lh 34`. |
+| Alphabet / count strip | one row of 26 at cell 38 is cramped. Prefer **2 rows of 13 at cell 64** (x0 = 540 - 6.5*64), rows at y 985 and 1060, letters under each cell. |
 | Watch strip | Fits about 900 px of chips (~50 mono characters in total). Keep the values short. |
 
-## Timeline recipe (copy from twoSum.ts)
+## Which film to copy
+
+| Problem shape | Copy |
+|---|---|
+| one array plus a lookup table (hash map / set) | `twoSum.ts` |
+| two inputs plus a counter | `validAnagram.ts` |
+| a list of words or strings, grouping or bucketing, counting letters | `groupAnagrams.ts` |
+| anything else | the nearest of the three; add the new visual to `fx.ts` (see Speed-ups) |
+
+## Timeline recipe
 
 The pattern is data-driven:
 - `IT[]` holds one entry per loop iteration: `{start, need, look, store?, found?}`.
@@ -97,7 +134,18 @@ The pattern is data-driven:
   - The first iteration starts at 120.
 - An iteration takes 4 bars (240 frames) for the first one, then 3 bars (180) for misses, then 3 bars for the hit.
 - Ending: `ret`, then `print` 60 frames later, then `party` 30 frames after that, then 90 frames of hold. Declare it in `meta.holds`.
-- Length: about 24 s with 2 iterations, 30 s with 3. The user liked 30 s. Pick the input so the loop runs about 3 times.
+- **Length: 40-70 s.** Budget in frames (30 fps):
+  - intro 180: the ducks land, the input pill, the call line
+  - setup 60-90 per setup line (e.g. `res = ...`, `count = ...`)
+  - **first pass 240-300**: walk every inner line at ≥ 30 frames each and hold the reveal 45-60
+  - later passes 150-210 each
+  - ending ~330: return 60, regroup or answer 90, print card 60, party 30, hold 90+
+
+  Example: intro 180 + setup 90 + passes (270 + 4×180) + ending 330 = 1590 frames ≈ 53 s.
+- If there are many passes (more than 6), show the first two at full speed, compress the middle
+  ones (90 frames, with a small "⏩" badge on the pennant), then slow down again for the decisive pass.
+- With the old 30 s pacing every iteration was squeezed (90 frames for 3 letters plus an append);
+  at the new pacing give each flying item ≥ 15 frames of air time and ≥ 10 frames between items.
 - Pick an input whose story has a **miss before the hit**, ideally one with a surprising value (like need = −2).
 
 ## Score recipe
@@ -108,7 +156,12 @@ Copy `twoSumScore.ts`. Keep these settings:
 - `moodControls: { energy: 0.5, warmth: 0.6, brightness: 0.45, tension: 0.4, space: 0.5 }`
 - `swing: 0.54`, `tail: 1.2`
 
-Bars = frames / 60. Map the sections onto the picture:
+Bars = frames / 60, so a 40-70 s film is **20-35 bars**. Make the form longer with sections, not with tempo:
+- a `verse` per pass group (4-6 bars each)
+- `repeat: 2` on a verse whose lines you also vary with `loopLines`
+- or a second `verse` with new motif variations, so the motif develops instead of looping verbatim
+
+Map the sections onto the picture:
 - intro, 2 bars, no groove
 - a verse per iteration
 - a quieter verse for misses (energy 0.42)
@@ -138,7 +191,7 @@ node tools/still.mjs <film> --frames A,B,C,D 2>&1 | tail -2     # pick: mid-iter
 cd out && ffmpeg -v error -y -i still-<film>-A.png -i still-<film>-B.png -i still-<film>-C.png -i still-<film>-D.png \
   -filter_complex "[0]scale=540:-1[a];[1]scale=540:-1[b];[2]scale=540:-1[c];[3]scale=540:-1[d];[a][b][c][d]hstack=4" sheet.png   # look at ONE image
 node tools/music.mjs check src/canvas-core/<film>Score.ts#<export> 2>&1 | grep -E "FLAG|CRAFT|CHECK|master|cadences"
-node tools/render.mjs <film> 2>&1 | grep -E "audio:|draw median|output|determinism|rror"     # ~2-3 min for 900 frames
+node tools/render.mjs <film> 2>&1 | grep -E "audio:|draw median|output|determinism|rror|  #"  # ~2.5 min per 900 frames; 1800 frames ≈ 5-6 min: use run_in_background (or timeout 600000)
 node tools/gate.mjs <film> 2>&1 | grep -E "FAIL|GATE:"
 node tools/verify-export.mjs out/<film>.mp4 --film <film> 2>&1 | grep -E "VERIFY-EXPORT:|FAIL"
 ffmpeg -v error -y -i out/<film>.mp4 -vf "select='not(mod(n\,56))',scale=216:-1,tile=8x2" -frames:v 1 out/vsheet.png   # one look at the motion
@@ -158,7 +211,7 @@ Add `--frames` stills only for the moments you changed. Never re-render the full
   - a linked list: ducks in a column with arrows
 
   Then the film file stays a cue table plus `draw`.
-- **Extract the shared film skeleton.** The title, target pill, ducks, rings, tags and panel wiring could become `duck/film.ts` (`duckFilm({ title, code, nums, iters, draw extras })`). Do this when making the 2nd new problem, not before. Then each new video is mostly data, which saves ~15k tokens a video.
+- **Extract the shared film skeleton** (now overdue: three films repeat it). The title, input pill, duck rows, rings, tags, the `RUN`/`WATCH` wiring and the panel could become `duck/film.ts` (`duckFilm({ title, sub, code, labels, rows, passes, draw extras })`). Do it at the start of the next video. After that each new video is mostly data, which saves ~15k tokens a video.
 - **Don't download the sound pack** (recorded marimba and vibes). The user is happy with the modeled sound.
 
 ## Track record
