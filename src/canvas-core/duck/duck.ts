@@ -61,7 +61,7 @@ const duckSprite = (env: Env, label: string, eye: Eye, look: number, mouth: numb
       const rnd = ellipse(ROUND_C[0], ROUND_C[1], ROUND_R, ROUND_R, 30);
       crayonShape(g, rnd, { col: "#efe4cc", shade: "#cbbd9e", seed: seed + 30, lw: 2, gap: 4, w: 4 });
     });
-    text(g, label, ROUND_C[0], ROUND_C[1] + 1, { size: label.length > 2 ? 26 : label.length > 1 ? 31 : 36, weight: 700, fill: C.ink });
+    text(g, label, ROUND_C[0], ROUND_C[1] + 1, { size: label.length > 3 ? 20 : label.length > 2 ? 26 : label.length > 1 ? 31 : 36, weight: 700, fill: C.ink });
     wax(g, () => {
       crayonShape(g, HEAD, { col: C.duck, shade: C.duckS, seed: seed + 40, lw: 2.8, burnish: (x, y) => (x - 22) ** 2 / 500 + (y + 128) ** 2 / 150 < 1, burnCol: C.duckL });
       const lo = BILL_LO.map(([x, y]) => [x + mouth * 2, y + mouth * 12 * Math.max(0, (x - 84) / 40)] as P);

@@ -137,7 +137,7 @@ export const drawCard = (ctx: Ctx, env: Env, x: number, y: number, title: string
       cline(g, [[-150, 50], [-40, 54], [150, 48]], C.gold, 6, 1801, 0.85, 1);
     });
     text(g, title, 0, -46, { size: 28, weight: 500, fill: C.inkSoft });
-    text(g, value, 0, 8, { size: 72, weight: 700, fill: C.ink });
+    text(g, value, 0, 8, { size: value.length > 12 ? 40 : value.length > 7 ? 56 : 72, weight: 700, fill: C.ink });
   });
   blit(ctx, env, s, x, y, q, q);
 };

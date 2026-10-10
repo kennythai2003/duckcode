@@ -33,6 +33,7 @@ export type PanelState = {
   flash?: number;          // 0..1
   output?: string; outQ?: number; // the console line and how much of it has printed
   pulse?: number;          // 0..1 a glow on the bar (the line that matters)
+  lineNo0?: number;        // the first visible line's index, for a scrolled window of a longer file
 };
 export type PanelLayout = { x: number; y: number; w: number; size: number; lh: number; pad: number; file?: string };
 
@@ -57,7 +58,7 @@ export const drawPanel = (g: Gfx, lines: string[], L: PanelLayout, s: PanelState
       // the code
       lines.forEach((ln, i) => {
         const y = top + i * L.lh + L.lh / 2 + 1; let x = L.x + 70;
-        text(g, String(i + 1), L.x + 44, y, { size: L.size * 0.72, weight: 500, family: FONT_MONO, fill: CODE.DIM, align: "right", alpha: 0.7 });
+        text(g, String(i + 1 + (s.lineNo0 ?? 0)), L.x + 44, y, { size: L.size * 0.72, weight: 500, family: FONT_MONO, fill: CODE.DIM, align: "right", alpha: 0.7 });
         tokenize(ln).forEach((t) => { if (t.s.trim()) text(g, t.s, x, y, { size: L.size, weight: t.col === CODE.KW || t.col === CODE.FN ? 700 : 500, family: FONT_MONO, fill: t.col, align: "left" }); x += measure(g, t.s, L.size, 500, FONT_MONO); });
       });
       // the watch strip: live variables as chips
