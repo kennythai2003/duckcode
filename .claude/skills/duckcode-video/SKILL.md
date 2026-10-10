@@ -25,6 +25,7 @@ repo. Copy the closest existing film (see "Which film to copy").
      - Fixed colours: i/l/lo rose, j/r/hi teal, mid/k gold.
      - Two pointers on one cell sit side by side (±27 px).
    - The small head pennant (`drawPointer`) is only for the duck being visited, never for indices on a structure.
+   - Markers must keep moving: bob them ±4 px (`tipY + 4 * Math.sin(f * 0.16)`). Static markers made the gate fail its dead-air check during 45-frame holds.
    - No text under ~16 px. Leave ≥ 110 px between stacked rows so markers don't cover the row above.
 5. The style, sound and fonts are fixed (crayon, muted, marimba + effects + quacks). Don't ask.
 6. Results go to `videos/<kebab>.mp4` plus a poster, a README row, a commit and a push to the session branch.
