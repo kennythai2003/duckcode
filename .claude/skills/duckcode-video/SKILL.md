@@ -237,6 +237,14 @@ Add `--frames` stills only for the moments you changed. Never re-render the full
     - `watch.delete()` to retire a chip when the watch strip gets crowded
   - `loopLines: true` with 2-bar motifs keeps a 36-bar score short to write.
 
+- Encode and Decode Strings (72 s): 1 music check, 1 look sheet (one fix: long titles clipped; `titleSprite` now auto-fits the width), 1 background render, passed first time.
+  - **Correctness rule (after a false alarm on Top K): simulate the user's algorithm in the film file and drive every on-screen value from the simulation** (`DEC: Snap[]` in encodeDecode.ts records `{f, line, i, j, length, res, note}` per executed line).
+  - Throw at module load if the result differs from what's expected.
+  - Before rendering, run the user's Python once on the input (`python3 -I` in the scratchpad) and compare. This costs ~1k tokens and makes a wrong answer impossible.
+  - **Long code (more than 17 lines):** show a 15-line window and scroll it between phases: `CODE.slice(off, off + 15)`, `line - off`, `lineNo0: off`.
+  - A one-line "what this line just did" note (e.g. `j = i + length = 6`) at y ~912 between the ducks and the data teaches more than a bubble, and is cheap.
+  - Duck labels up to 4 chars now fit (20 px). `drawCard` shrinks long values automatically.
+
 ## Quality bar (unchanged)
 
 - A gate of 15/15, a music `CHECK PASS`, and `VERIFY-EXPORT PASS`.
