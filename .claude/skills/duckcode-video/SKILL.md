@@ -287,6 +287,8 @@ Add `--frames` stills only for the moments you changed. Never re-render the full
   - **Budget the length before rendering**: 11 loop iterations came out at 96 s (over the cap). Run the simulation, print `DURATION`, and speed up the middle iterations (halve durations, min 15 frames) so it lands at ≤ 85 s. `DURATION = ceil((SIM_END + 330) / 120) * 120`.
   - **Dead-air gate**: a mostly static scene fails the gate on every long hold. Give structures a built-in ripple (`y + 4.5 * sin(f * 0.1 + c * 0.45)` per cell) and start them appearing early (frame 30), so no window is still. Do this up front for any tape or row.
 
+- **Never cut off code the viewer needs (Valid Palindrome shipped with its helper function hidden below a 15-line window).** Before rendering, count `CODE.length`: ≤ 15 lines → `size 23, lh 34`; 16-18 lines → **`size 21, lh 30`, all visible, no window**; more than 18 → a scrolling window is allowed ONLY if the highlight actually visits every line in the file (scroll to a helper before it runs). Helper functions called by the main code must always be visible, and the note should show their result (`isAlphanumeric(',') → False`).
+
 ## Quality bar (unchanged)
 
 - A gate of 15/15, a music `CHECK PASS`, and `VERIFY-EXPORT PASS`.

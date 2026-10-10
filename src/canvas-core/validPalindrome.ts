@@ -34,10 +34,10 @@ const SIM: Snap[] = (() => {
   let result = true;
   while (l < r) {
     at(4, `l = ${l} < r = ${r}`, 15);
-    while (l < r && !alnum(S[l])) { at(5, `'${S[l]}' is not a letter or digit`, 30, { sub: "skip it" }); const k = l; l += 1; at(6, `l = ${l}`, 15, { skip: k }); }
-    at(5, `'${S[l]}' is a letter: l stays`, 30);
-    while (l < r && !alnum(S[r])) { at(7, `'${S[r]}' is not a letter or digit`, 30, { sub: "skip it" }); const k = r; r -= 1; at(8, `r = ${r}`, 15, { skip: k }); }
-    at(7, `'${S[r]}' is a letter: r stays`, 30);
+    while (l < r && !alnum(S[l])) { at(5, `isAlphanumeric('${S[l]}')  →  False`, 30, { sub: "not a-z, A-Z or 0-9: skip it" }); const k = l; l += 1; at(6, `l = ${l}`, 15, { skip: k }); }
+    at(5, `isAlphanumeric('${S[l]}')  →  True`, 30, { sub: "a letter or digit: l stays" });
+    while (l < r && !alnum(S[r])) { at(7, `isAlphanumeric('${S[r]}')  →  False`, 30, { sub: "not a-z, A-Z or 0-9: skip it" }); const k = r; r -= 1; at(8, `r = ${r}`, 15, { skip: k }); }
+    at(7, `isAlphanumeric('${S[r]}')  →  True`, 30, { sub: "a letter or digit: r stays" });
     const same = S[l].toLowerCase() === S[r].toLowerCase();
     at(9, `'${S[l]}'.lower() = '${S[l].toLowerCase()}'  vs  '${S[r]}'.lower() = '${S[r].toLowerCase()}'`, 45, { verdict: same ? "yes" : "no", sub: same ? "equal: keep going" : "different: not a palindrome" });
     if (!same) { result = false; at(10, "return False", 30); break; }
@@ -59,8 +59,7 @@ const snapAt = (f: number) => [...SIM].reverse().find((x) => f >= x.f);
 // ---------------------------------------------------------------- layout
 const DUCK_Y = 740, DUCK_K = 0.8, DUCK_X = [260, 820], NOTE_Y = 535;
 const cell = (c: number): P => [540 + ((c % 15) - 7) * 68, 950 + Math.floor(c / 15) * 175];
-const PANEL = { x: 46, y: 1196, w: 988, size: 22, lh: 34, pad: 18, file: "valid_palindrome.py" };
-const SHOW = 15;
+const PANEL = { x: 46, y: 1196, w: 988, size: 21, lh: 30, pad: 18, file: "valid_palindrome.py" };
 
 // ---------------------------------------------------------------- motion
 const CMP = SIM.filter((x) => x.line === 9);
@@ -117,7 +116,7 @@ const draw = (ctx: Ctx, f: number, env: Env) => {
   const aq = ease.spring(prog(f, CUE.print, 24)); if (aq > 0) drawCard(ctx, env, 540, 545, "isPalindrome returns", "True", aq);
   if (f >= CUE.party) for (let k = 0; k < 6; k++) { const a = (k / 6) * Math.PI * 2 + (f - CUE.party) * 0.025; drawSparkle(ctx, env, 540 + Math.cos(a) * 290, 545 + Math.sin(a) * 120, 13 + 4 * Math.sin(f * 0.3 + k), a); }
   stageTitle(ctx, env, f, TITLE, SUB, [{ parts: [["s = ", C.ink], [`"${S}"`, C.rose]], from: CUE.s, to: CUE.print }]);
-  stagePanel(g, f, { code: CODE, layout: PANEL, run: RUN, watch: WATCH, show: CUE.s, ret: CUE.ret, print: CUE.print, output: "True", window: { off: f >= CUE.ret ? 3 : 0, view: SHOW } });
+  stagePanel(g, f, { code: CODE, layout: PANEL, run: RUN, watch: WATCH, show: CUE.s, ret: CUE.ret, print: CUE.print, output: "True" });
 };
 
 const cues: SfxCue[] = [
