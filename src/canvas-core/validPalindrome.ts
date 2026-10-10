@@ -27,7 +27,7 @@ const alnum = (c: string) => /[a-zA-Z0-9]/.test(c);
 // ---------------------------------------------------------------- simulate the user's code
 type Snap = { f: number; line: number; l: number; r: number; note: string; sub?: string; skip?: number; pair?: [number, number]; verdict?: "yes" | "no" };
 const SIM: Snap[] = (() => {
-  const out: Snap[] = []; let f = 300, l = 0, r = N - 1;
+  const out: Snap[] = []; let f = 150, l = 0, r = N - 1;   // right after the def line: no dead air
   let pairNo = 0; const fast = () => pairNo >= 3 && pairNo <= 8;   // the middle pairs speed up; the first and last slow down again
   const at = (line: number, note: string, dur: number, x: Partial<Snap> = {}) => { out.push({ f, line, l, r, note, ...x }); f += fast() ? Math.max(15, Math.round(dur / 2 / 15) * 15) : dur; };
   at(3, `l = 0, r = ${N - 1}`, 45);
@@ -48,8 +48,8 @@ const SIM: Snap[] = (() => {
   at(12, "return True", 30);
   return out;
 })();
-const SIM_END = SIM[SIM.length - 1].f + 30, DURATION = Math.ceil((SIM_END + 330) / 120) * 120;
-export const CUE = { land: [15, 23], s: 60, call: 90, def: 120, tape: 30, ret: DURATION - 300, print: DURATION - 240, party: DURATION - 210 };
+const SIM_END = SIM[SIM.length - 1].f + 30, RET = Math.ceil(SIM_END / 15) * 15, DURATION = Math.ceil((RET + 300) / 120) * 120;   // spare frames go to the answer card, never to a gap
+export const CUE = { land: [15, 23], s: 60, call: 90, def: 120, tape: 30, ret: RET, print: RET + 60, party: RET + 90 };
 if (CUE.ret < SIM_END) throw new Error("validPalindrome: the simulation runs into the ending");
 const RUN: Run = [[CUE.s, 0], [CUE.call, 17], [CUE.def, 2], ...SIM.map((x): [number, number] => [x.f, x.line]), [CUE.print, 17]];
 checkBeats("validPalindrome", RUN);

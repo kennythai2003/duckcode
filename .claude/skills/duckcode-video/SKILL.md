@@ -289,6 +289,8 @@ Add `--frames` stills only for the moments you changed. Never re-render the full
 
 - **Never cut off code the viewer needs (Valid Palindrome shipped with its helper function hidden below a 15-line window).** Before rendering, count `CODE.length`: ≤ 15 lines → `size 23, lh 34`; 16-18 lines → **`size 21, lh 30`, all visible, no window**; more than 18 → a scrolling window is allowed ONLY if the highlight actually visits every line in the file (scroll to a helper before it runs). Helper functions called by the main code must always be visible, and the note should show their result (`isAlphanumeric(',') → False`).
 
+- **No gap between the intro and the first step (Valid Palindrome had 5 s of nothing at 0:04-0:09).** Start the simulation 30 frames after the last intro line (`def` at 120 → first step at 150). Compute `RET = ceil(SIM_END / 15) * 15`, `DURATION = ceil((RET + 300) / 120) * 120`, `print = RET + 60`, `party = RET + 90`: any spare frames go to the held answer card at the end, never to a pause. Before rendering, check that no two consecutive `RUN` frames are more than ~60 frames apart (outside the final hold).
+
 ## Quality bar (unchanged)
 
 - A gate of 15/15, a music `CHECK PASS`, and `VERIFY-EXPORT PASS`.
