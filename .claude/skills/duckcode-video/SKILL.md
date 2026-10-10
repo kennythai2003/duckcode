@@ -32,6 +32,27 @@ repo. Copy the closest existing film (see "Which film to copy").
 
 The user may paste the template from `PROMPT_TEMPLATE.md`. Its fields map 1:1 onto `PROBLEM`, `CODE`, the inputs and the story.
 
+## THE FASTEST PATH (use this unless the problem forces otherwise)
+
+Start from **`src/canvas-core/findMax.ts`**, the template film. It is data plus the visuals unique to the problem; the rest comes from shared helpers:
+
+| Need | Helper (don't rewrite it) |
+|---|---|
+| pond background, glints, title, input pills, code panel with running line / watch chips / console / scrolling window | `duck/stage.ts`: `stageBegin`, `stageTitle`, `stagePanel`, `checkBeats` |
+| music, effects, per-duck quacks, limiter | `duck/sound.ts`: `duckSound({fps, frames, theme, cues, quacks, voices, seed})` |
+| **the theme song: do NOT compose a new score** | `duck/themes.ts`: `themeFor(leetcodeNumber, title)` rotates four channel themes (Lily Pad Skip, Pond Shuffle, Sunny Bounce, Reed Skip); they stretch to the film's length and end on the answer |
+| hop / drop, ducks, markers, bubbles, cards, ✓/✗, sprites | `duck/motion.ts`, `duck/duck.ts`, `duck/fx.ts`, `duck/crayon.ts` |
+
+Steps (the whole job):
+1. Run the user's Python once on a small input; note the output (and a set/dict's iteration order if iterated).
+2. `cp findMax.ts <name>.ts`; set `LC`, `TITLE`, `SUB`, `NUMS`/data, `EXPECTED`, `CODE` (LeetCode style), and rewrite `STEPS`/simulation so every value comes from the user's algorithm (throw if it disagrees).
+3. Edit `CUE`/`RUN`/`WATCH` frames (multiples of 15; **the length must be a multiple of 120 frames**). Put `CUE.ret` exactly **300 frames before the end** (hook = 3 bars, outro = 2 bars) so the theme's climax lands on the return and the card sits on the outro.
+4. Edit `draw` for the problem's own visuals; copy its structure from the nearest older film (see "Which film to copy").
+5. Write `cues` (effects) and `QUACKS`; add `src/hosts/page-<name>.ts` (3 lines).
+6. `tsc` → one look sheet (3-4 frames) → background render → gate → verify → commit. **No music check is needed** (the themes are pre-checked); skip `music.mjs` entirely.
+
+Old films (twoSum … longestConsecutive) have their own bespoke scores and cue code; leave them as they are. New films use themes. Add a fifth/sixth variant to `themes.ts` only if the user asks.
+
 ## What NOT to do (the waste in the first two videos)
 
 | Waste | Cost | Do this instead |
@@ -155,7 +176,7 @@ The pattern is data-driven:
   at the new pacing give each flying item ≥ 15 frames of air time and ≥ 10 frames between items.
 - Pick an input whose story has a **miss before the hit**, ideally one with a surprising value (like need = −2).
 
-## Score recipe
+## Score recipe (only for the old bespoke films; new films use `themeFor`)
 
 Copy `twoSumScore.ts`. Keep these settings:
 - `style: "playful"`, 120 bpm, 4/4

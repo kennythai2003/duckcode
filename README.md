@@ -35,6 +35,10 @@ src/canvas-core/duck/      reusable duck kit
   quack.ts                 the quack synth
   motion.ts                hop + drop
   chrome.ts                title block + parameters pill
+  stage.ts                 pond + title + code-panel wiring shared by every film
+  sound.ts                 score + effects + quacks mixer (duckSound)
+  themes.ts                four rotating channel theme songs (themeFor)
+src/canvas-core/findMax.ts     the template film: copy it for a new problem
 src/canvas-core/twoSum.ts       the Two Sum film: problem, cue table, choreography
 src/canvas-core/twoSumScore.ts  its score
 src/canvas-core/twoSumSound.ts  score + effect cues + quacks
