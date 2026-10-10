@@ -76,7 +76,8 @@ const BEST = (() => { let b: number[] = []; for (const s of SIM) if (s.line === 
 // ---------------------------------------------------------------- layout
 const DUCK_Y = 740, DUCK_K = 0.68, DUCK_X = [100, 262, 424, 586, 748, 910], TAG_Y = 822, NOTE_Y = 535;
 // the number line: real cells for the set, ghost slots for the neighbours the code asks about
-const POS: Record<number, P> = { 0: [140, 1000], 1: [250, 1000], 2: [360, 1000], 3: [470, 1000], 4: [580, 1000], 5: [690, 1000], 99: [250, 1120], 100: [360, 1120], 101: [470, 1120], 199: [690, 1120], 200: [800, 1120], 201: [910, 1120] };
+const R1 = 972, R2 = 1150;
+const POS: Record<number, P> = { 0: [140, R1], 1: [250, R1], 2: [360, R1], 3: [470, R1], 4: [580, R1], 5: [690, R1], 99: [250, R2], 100: [360, R2], 101: [470, R2], 199: [690, R2], 200: [800, R2], 201: [910, R2] };
 for (const s of SIM) if (s.check && !POS[s.check.v]) throw new Error(`longestConsecutive: no slot for ${s.check.v}`);
 const PANEL: PanelLayout = { x: 46, y: 1196, w: 988, size: 23, lh: 36, pad: 18, file: "longest_consecutive.py" };
 const LAND_AT = (k: number) => CUE.set + 10 + k * 12;   // duck k's number lands in numSet
@@ -135,7 +136,7 @@ const draw = (ctx: Ctx, f: number, env: Env) => {
 
   // numSet on a number line: set cells; the current run teal; the best run gold at the end; ghosts on demand
   const sq = prog(f, CUE.set, 8);
-  if (sq > 0) g.group("plain", () => { text(g, "numSet", 46, 930, { size: 28, weight: 700, fill: C.ink, align: "left", alpha: sq }); text(g, "…", 590, 1120, { size: 40, weight: 700, fill: "#5d6e74", alpha: sq }); });
+  if (sq > 0) g.group("plain", () => { text(g, "numSet", 46, 900, { size: 28, weight: 700, fill: C.ink, align: "left", alpha: sq }); text(g, "…", 590, R2, { size: 40, weight: 700, fill: "#5d6e74", alpha: sq }); });
   NUMS.forEach((v, k) => {
     const q = ease.spring(prog(f, LAND_AT(k) + 20, 18)); if (q <= 0) return;
     const kind = f >= RET && BEST.includes(v) ? "best" : s?.run?.includes(v) ? "run" : "set";
