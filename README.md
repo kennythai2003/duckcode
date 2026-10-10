@@ -12,6 +12,7 @@ LeetCode visualizations where the input is ducks. Each array element is a rubber
 | 271. Encode and Decode Strings (Python), `strs = ["neet", "code", "you"]`, 72 s | [`videos/encode-decode-strings.mp4`](videos/encode-decode-strings.mp4) |
 | 238. Product of Array Except Self (Python), `nums = [1, 2, 3, 4]`, 52 s | [`videos/product-except-self.mp4`](videos/product-except-self.mp4) |
 | 128. Longest Consecutive Sequence (Python), `nums = [100, 4, 200, 1, 3, 2]`, 52 s | [`videos/longest-consecutive.mp4`](videos/longest-consecutive.mp4) |
+| 125. Valid Palindrome (Python), `s = "A man, a plan, a canal: Panama"`, 80 s | [`videos/valid-palindrome.mp4`](videos/valid-palindrome.mp4) |
 
 ## Look
 

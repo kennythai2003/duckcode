@@ -282,6 +282,11 @@ Add `--frames` stills only for the moments you changed. Never re-render the full
   - Pattern: show a set as a **number line** (neighbours side by side), with ghost cells for the `num - 1` / `num + length` probes and a big ✓/✗ at the cell's top-right corner, never on the number.
   - **The second render was avoidable:** on a two-row structure, the marker on the lower row covered a cell in the upper row. Keep ≥ 175 px between row centres when markers point at the lower row (rows at y 972 and 1150 here). Check one still with the marker on the lower row before the full render.
 
+- Valid Palindrome (80 s, first video on the shared helpers + themes): 3 renders; no music check needed. Lessons:
+  - **A long string (30 chars) does not become 30 ducks.** Use 2 ducks (the two ends) plus a tape of cells in 2 rows of 15 (cell 58 px, pitch 68, rows at y 950 and 1125), and `l`/`r` markers.
+  - **Budget the length before rendering**: 11 loop iterations came out at 96 s (over the cap). Run the simulation, print `DURATION`, and speed up the middle iterations (halve durations, min 15 frames) so it lands at ≤ 85 s. `DURATION = ceil((SIM_END + 330) / 120) * 120`.
+  - **Dead-air gate**: a mostly static scene fails the gate on every long hold. Give structures a built-in ripple (`y + 4.5 * sin(f * 0.1 + c * 0.45)` per cell) and start them appearing early (frame 30), so no window is still. Do this up front for any tape or row.
+
 ## Quality bar (unchanged)
 
 - A gate of 15/15, a music `CHECK PASS`, and `VERIFY-EXPORT PASS`.
