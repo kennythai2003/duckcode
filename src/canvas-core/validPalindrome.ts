@@ -49,7 +49,7 @@ const SIM: Snap[] = (() => {
   return out;
 })();
 const SIM_END = SIM[SIM.length - 1].f + 30, DURATION = Math.ceil((SIM_END + 330) / 120) * 120;
-export const CUE = { land: [15, 23], s: 60, call: 90, def: 120, tape: 150, ret: DURATION - 300, print: DURATION - 240, party: DURATION - 210 };
+export const CUE = { land: [15, 23], s: 60, call: 90, def: 120, tape: 30, ret: DURATION - 300, print: DURATION - 240, party: DURATION - 210 };
 if (CUE.ret < SIM_END) throw new Error("validPalindrome: the simulation runs into the ending");
 const RUN: Run = [[CUE.s, 0], [CUE.call, 17], [CUE.def, 2], ...SIM.map((x): [number, number] => [x.f, x.line]), [CUE.print, 17]];
 checkBeats("validPalindrome", RUN);
