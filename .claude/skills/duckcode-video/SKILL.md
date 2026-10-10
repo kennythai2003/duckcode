@@ -224,6 +224,8 @@ Add `--frames` stills only for the moments you changed. Never re-render the full
   - a final "regroup" where the ducks swim to new x positions (`duckX(i, f)`)
   - long signatures (`def f(self, x: List[str]) -> ...`) fit at `size 23, lh 34`
 
+- Contains Duplicate (48 s, the first video at the slower pace): 1 music check, 1 look sheet (one fix: clamp the verdict bubble's cx to ≤ 740), 1 background render (~4 min for 1440 frames), passed first time. `containsDuplicateScore.ts` has a `bass("G Em")` root-fifth helper plus `sec(harmony)`; copy those, since they make long forms cheap to write. If the user pastes only the method body, wrap it in `class Solution:` with the LeetCode signature.
+
 ## Quality bar (unchanged)
 
 - A gate of 15/15, a music `CHECK PASS`, and `VERIFY-EXPORT PASS`.
