@@ -256,6 +256,11 @@ Add `--frames` stills only for the moments you changed. Never re-render the full
   - Pattern: a **carried value as a travelling pill** (`prefix`/`postfix`) that rides under the current cell.
   - A two-line note: what the line did, plus what the carried value *means* ("prefix = product of everything left of i").
 
+- Longest Consecutive Sequence (52 s): 2 renders.
+  - **Iterating a Python set or dict? Print its actual iteration order with `python3 -I` and hard-code it** (`ORDER` in longestConsecutive.ts); JS can't reproduce CPython's set order. Assert that it's a permutation of the set.
+  - Pattern: show a set as a **number line** (neighbours side by side), with ghost cells for the `num - 1` / `num + length` probes and a big ✓/✗ at the cell's top-right corner, never on the number.
+  - **The second render was avoidable:** on a two-row structure, the marker on the lower row covered a cell in the upper row. Keep ≥ 175 px between row centres when markers point at the lower row (rows at y 972 and 1150 here). Check one still with the marker on the lower row before the full render.
+
 ## Quality bar (unchanged)
 
 - A gate of 15/15, a music `CHECK PASS`, and `VERIFY-EXPORT PASS`.

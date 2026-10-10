@@ -11,6 +11,7 @@ LeetCode visualizations where the input is ducks. Each array element is a rubber
 | 347. Top K Frequent Elements (Python), `nums = [1, 1, 1, 2, 2, 3]`, `k = 2`, 72 s | [`videos/top-k-frequent.mp4`](videos/top-k-frequent.mp4) |
 | 271. Encode and Decode Strings (Python), `strs = ["neet", "code", "you"]`, 72 s | [`videos/encode-decode-strings.mp4`](videos/encode-decode-strings.mp4) |
 | 238. Product of Array Except Self (Python), `nums = [1, 2, 3, 4]`, 52 s | [`videos/product-except-self.mp4`](videos/product-except-self.mp4) |
+| 128. Longest Consecutive Sequence (Python), `nums = [100, 4, 200, 1, 3, 2]`, 52 s | [`videos/longest-consecutive.mp4`](videos/longest-consecutive.mp4) |
 
 ## Look
 
@@ -43,6 +44,7 @@ src/canvas-core/containsDuplicate*.ts the Contains Duplicate film, score, sound
 src/canvas-core/topKFrequent*.ts the Top K Frequent film, score, sound
 src/canvas-core/encodeDecode*.ts the Encode and Decode Strings film, score, sound
 src/canvas-core/productExceptSelf*.ts the Product of Array Except Self film, score, sound
+src/canvas-core/longestConsecutive*.ts the Longest Consecutive Sequence film, score, sound
 assets/fonts/              Space Grotesk (titles) and JetBrains Mono (code), SIL OFL 1.1
 ```
 
