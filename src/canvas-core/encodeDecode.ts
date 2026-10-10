@@ -12,7 +12,7 @@ import type { Film } from "./film";
 import { pondPlate, waterGlints } from "./duck/pond";
 import { drawDuck, drawPointer, headTop, chest, type DuckPose, type Eye } from "./duck/duck";
 import { drawPanel, type PanelLayout } from "./duck/codePanel";
-import { drawBubble, drawCard, drawSparkle, drawTag, splash, waterRing } from "./duck/fx";
+import { drawBubble, drawCard, drawMarker, drawSparkle, drawTag, splash, waterRing } from "./duck/fx";
 import { C, CRAYON_M, blit, crayonShape, darker, sprite, wax } from "./duck/crayon";
 import { FONTS, ease, prog, roundRect, text } from "./duck/kit";
 import { hop, drop } from "./duck/motion";
@@ -87,8 +87,8 @@ const RESULT = DEC[DEC.length - 1].res;
 if (RESULT.join("|") !== STRS.join("|")) throw new Error("encodeDecode: decode(encode(strs)) != strs");
 
 // ---------------------------------------------------------------- layout
-const DUCK_Y = 760, DUCK_K = 0.9, DUCK_X = [240, 540, 840], TAG_Y = 845, NOTE_Y = 912;
-const CELL_W = 104, COLS = 9, cellXY = (p: number): P => [540 + ((p % COLS) - (COLS - 1) / 2) * CELL_W, p < COLS ? 1005 : 1105];
+const DUCK_Y = 740, DUCK_K = 0.88, DUCK_X = [240, 540, 840], TAG_Y = 822, NOTE_Y = 880;
+const CELL_W = 104, COLS = 9, cellXY = (p: number): P => [540 + ((p % COLS) - (COLS - 1) / 2) * CELL_W, p < COLS ? 1000 : 1150];
 const RES_AT: P = [540, 585];
 const PANEL: PanelLayout = { x: 46, y: 1196, w: 988, size: 23, lh: 34, pad: 18, file: "encode_decode.py" };
 const VIEW = 15, OFF_MAX = CODE.length - VIEW;
@@ -141,7 +141,7 @@ const sPointer = (f: number): { at: P; tilt: number } | null => {
   return { at: top(cur), tilt: -0.12 };
 };
 // i and j on the tape: slide from their previous cell to the new one over 12 frames (a hop across rows)
-const tapePos = (p: number, side: number): P => { const [x, y] = cellXY(Math.min(p, ENC.length)); return [x + side * 16, y - 40]; };
+const tapePos = (p: number, side: number): P => { const [x, y] = cellXY(Math.min(p, ENC.length)); return [x + side * 27, y - 30]; };
 const ijAt = (f: number, which: "i" | "j"): P | null => {
   if (f < CUE.i0) return null;
   const snaps = DEC.filter((d) => d.f <= f); const cur = snaps.length ? snaps[snaps.length - 1] : null, prev = snaps.length > 1 ? snaps[snaps.length - 2] : null;
@@ -181,8 +181,8 @@ const draw = (ctx: Ctx, f: number, env: Env) => {
   if (tq > 0) {
     const cut = [...DEC].reverse().find((d) => d.append && f >= d.f && f < d.f + 45)?.append;
     g.group("plain", () => {
-      text(g, f < CUE.join ? "res" : "s", 40, 958, { size: 26, weight: 700, fill: C.ink, align: "left", alpha: tq });
-      for (let p = 0; p < ENC.length; p++) { const [x, y] = cellXY(p); text(g, String(p), x, y - 46, { size: 18, weight: 500, fill: "#2f3d44", alpha: 0.75 * tq }); }
+      text(g, f < CUE.join ? "res" : "s", 40, 950, { size: 26, weight: 700, fill: C.ink, align: "left", alpha: tq });
+      text(g, "index", 40, 1080, { size: 18, weight: 500, fill: "#2f3d44", align: "left", alpha: 0 });
     });
     for (let p = 0; p < ENC.length; p++) {
       const [x, y] = cellXY(p), on = f >= CELL_AT[p];
@@ -191,6 +191,7 @@ const draw = (ctx: Ctx, f: number, env: Env) => {
       const q = ease.spring(prog(f, CELL_AT[p], 16));
       blit(ctx, env, cellSprite(env, ENC[p], OWNER[p], META[p]), x, y - lift, q, q);
     }
+    g.group("plain", () => { for (let p = 0; p < ENC.length; p++) { const [x, y] = cellXY(p); text(g, String(p), x - 34, y - 20 - (0), { size: 16, weight: 700, fill: "#3a302b", align: "left", alpha: 0.7 * tq }); } });
     // the joined string glows once, at return "".join(res)
     if (f >= CUE.join && f < CUE.join + 40) for (let s = 0; s < 6; s++) { const a = (s / 6) * Math.PI * 2 + f * 0.05; drawSparkle(ctx, env, 540 + Math.cos(a) * 470, 1055 + Math.sin(a) * 90, 13 * Math.sin(Math.PI * prog(f, CUE.join, 40)), a); }
   }
@@ -199,8 +200,8 @@ const draw = (ctx: Ctx, f: number, env: Env) => {
   STRS.forEach((_, i) => { if (drop(f, CUE.land[i]) !== null) drawDuck(ctx, env, g, pose(i, f), f); });
   const sp = sPointer(f); if (sp) drawPointer(ctx, env, sp.at, DUCK_K * 1.1, sp.tilt, "s");
   const ip = ijAt(f, "i"), jp = ijAt(f, "j"), ijq = 1 - ease.out(prog(f, CUE.ret, 10));
-  if (ijq > 0 && jp) drawPointer(ctx, env, jp, 0.62 * ijq, 0.15, "j");
-  if (ijq > 0 && ip) drawPointer(ctx, env, ip, 0.62 * ijq, -0.15, "i");
+  if (ijq > 0 && jp) drawMarker(ctx, env, jp[0], jp[1], "j", 0.92 * ijq);
+  if (ijq > 0 && ip) drawMarker(ctx, env, ip[0], ip[1], "i", 0.92 * ijq);
   CUE.land.forEach((l, i) => splash(g, DUCK_X[i], DUCK_Y + 14, (f - l) / 18, 1100 + i, 0.9));
 
   // flights: encode = length, "#" and letters from duck to tape; decode = the cut word back to its duck

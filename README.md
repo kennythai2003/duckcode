@@ -16,7 +16,7 @@ LeetCode visualizations where the input is ducks. Each array element is a rubber
 - **Format:** 9:16 (1080×1920), 30 fps, 120 bpm. A beat is 15 frames and a bar is 60.
 - **Style:** crayon (anidoodle's `balloon` plate). Wax scribble fills that skip the paper's tooth, a darker crayon on the shade side, a pale burnish toward the light (light comes from the upper left), and a fat contour gone over twice. The colours are muted: dusty blues, sage, mustard and warm paper. Anything that moves is drawn once into a sprite and moved as a whole, so its texture doesn't shimmer.
 - **Code panel:** a clean dark editor card, deliberately not hand-drawn. It shows the running line, a strip of live variables, and a console line.
-- **State markers:** a rose ring is the duck being asked, a teal ring is a duck already visited, and a gold ring is the answer. A pennant on the duck's head shows the pointer (`i`).
+- **State markers:** a rose ring is the duck being asked, a teal ring is a duck already visited, and a gold ring is the answer. A pennant on the duck's head marks the duck being visited. Index pointers on tapes and arrays are big coloured markers (`i` rose, `j` teal).
 - **Type:** Space Grotesk for titles and labels, JetBrains Mono for code.
 - **Sound:** a composed score (playful style, marimba, F major), anidoodle's code-built effects, and our own synthesized quack (`src/canvas-core/duck/quack.ts`).
 

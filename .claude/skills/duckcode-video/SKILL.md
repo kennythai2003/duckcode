@@ -20,8 +20,14 @@ repo. Copy the closest existing film (see "Which film to copy").
    panel rows). Use the user's code exactly as pasted; only add the input line(s) and the print.
 3. **Multiple rows are fine and preferred over cramming.** Ducks may sit in 2 rows. Long strips
    (the alphabet, a big array, a grid) may wrap into 2 rows. Never shrink text below ~20 px to fit one row.
-4. The style, sound and fonts are fixed (crayon, muted, marimba + effects + quacks). Don't ask.
-5. Results go to `videos/<kebab>.mp4` plus a poster, a README row, a commit and a push to the session branch.
+4. **Readability beats cuteness.** Every pointer must be identifiable at phone size in under a second.
+   - Pointers on a tape, array or cells use `drawMarker(ctx, env, x, tipY, "i")` from fx.ts: a big coloured tag with the name and an arrow tip, scale ≥ 0.9.
+     - Fixed colours: i/l/lo rose, j/r/hi teal, mid/k gold.
+     - Two pointers on one cell sit side by side (±27 px).
+   - The small head pennant (`drawPointer`) is only for the duck being visited, never for indices on a structure.
+   - No text under ~16 px. Leave ≥ 110 px between stacked rows so markers don't cover the row above.
+5. The style, sound and fonts are fixed (crayon, muted, marimba + effects + quacks). Don't ask.
+6. Results go to `videos/<kebab>.mp4` plus a poster, a README row, a commit and a push to the session branch.
 
 The user may paste the template from `PROMPT_TEMPLATE.md`. Its fields map 1:1 onto `PROBLEM`, `CODE`, the inputs and the story.
 
