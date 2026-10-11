@@ -320,3 +320,5 @@ Add `--frames` stills only for the moments you changed. Never re-render the full
   - A cycle: the back arrow is a deep sag (0.42) under the row; markers sit ABOVE the ducks there.
   - Sorted/rotated arrays: bars under the ducks (`barH = 40 + v * unit`), l/m/r markers on the bar tops (side by side, ±64 px, when they share a bar), out-of-range bars drawn at alpha 0.4.
   - `stagePanel` watch: a value of `""` removes the chip (per-phase variables).
+  - **Small ducks (k ≤ 0.55) with static pills/arrows fail dead air everywhere** (Merge Two Lists: 19 windows). Give every node a slow sideways sway (`6 * sin(f * 0.07 + n * 1.9)`; the arrows follow) and bob pills ±5 px. Markers bobbing ±4 px on k ≥ 0.7 ducks is enough.
+  - `q.sh` must not wait on other `q.sh` processes: `pgrep -f q.sh` matches its own launcher, so it waited forever and burned a 2-hour background slot. Start one queue at a time instead.
