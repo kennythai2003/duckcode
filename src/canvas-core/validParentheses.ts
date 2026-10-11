@@ -26,7 +26,7 @@ const CODE = [
 // ---------------------------------------------------------------- simulate the user's code
 type Snap = { f: number; line: number; c?: number; stack: number[]; note: string; sub?: string; key?: string; push?: number; pop?: number; ok?: boolean };
 export const SIM: Snap[] = (() => {
-  const out: Snap[] = [], stack: number[] = [], map = new Map(MAP); let f = 150, c: number | undefined;
+  const out: Snap[] = [], stack: number[] = [], map = new Map(MAP); let f = 135, c: number | undefined;
   const at = (line: number, note: string, dur: number, x: Partial<Snap> = {}) => { out.push({ f, line, c, stack: [...stack], note, ...x }); f += dur; };
   at(3, "brackets_map = { ']':'[',  ')':'(',  '}':'{' }", 45, { sub: "each closer → the opener it needs" });
   at(4, "stack = []", 30, { sub: "openers wait here for their closer" });
