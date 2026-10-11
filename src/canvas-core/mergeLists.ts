@@ -75,15 +75,15 @@ const JOIN = new Map<number, [number, number]>();
 SIM.forEach((x) => x.joined.forEach((n, k) => { if (!JOIN.has(n)) JOIN.set(n, [x.f, k]); }));
 const home = (n: number): P => (n === DUMMY ? [DUMMY_X, ROW_Y[2]] : [RX(n % 3), ROW_Y[ROW[n]]]);
 const pos = (n: number, f: number): P => {
-  const j = JOIN.get(n); if (!j || n === DUMMY) return home(n);
+  const j = JOIN.get(n), sway = n === DUMMY ? 0 : 6 * Math.sin(f * 0.07 + n * 1.9); if (!j || n === DUMMY) { const h = home(n); return [h[0] + sway, h[1]]; }
   const t = ease.inOut(prog(f, j[0] + 4, 30)), a = home(n), b: P = [SLOT(j[1]), ROW_Y[2]];
-  return [lerp(a[0], b[0], t), lerp(a[1], b[1], t) - 50 * Math.sin(Math.PI * t)];
+  return [lerp(a[0], b[0], t) + sway, lerp(a[1], b[1], t) - 50 * Math.sin(Math.PI * t)];
 };
 
 // ---------------------------------------------------------------- motion
 const HOTS = SIM.filter((x) => x.hot !== undefined);
 const HOPS: [number, number, number][] = [...[...JOIN.entries()].map(([n, [f0]]) => [n, f0 + 34, 30] as [number, number, number]),
-  ...[0, 1, 2, 3, 4, 5].flatMap((d) => [[d, CUE.party + d * 4, 26], [d, CUE.party + 60 + d * 4, 18]] as [number, number, number][])];
+  ...[0, 1, 2, 3, 4, 5].flatMap((d) => [[d, CUE.ret + 4 + d * 8, 26], [d, CUE.party + d * 4, 26], [d, CUE.party + 60 + d * 4, 18]] as [number, number, number][])];
 export const QUACKS: [number, number][] = [...CUE.land.map((f, d) => [f + 2, d] as [number, number]), ...[...JOIN.entries()].map(([n, [f0]]) => [f0 + 36, n] as [number, number]), [CUE.party + 2, 0], [CUE.party + 8, 3]];
 const pose = (d: number, f: number): DuckPose => {
   const s = snapAt(f), [x, y] = pos(d, f), bob = Math.sin((2 * Math.PI * f) / 60 + d * 1.3); let lift = 3 + 3 * bob, sx = 1, sy = 1;
@@ -126,7 +126,7 @@ const draw = (ctx: Ctx, f: number, env: Env) => {
   if (s && f < CUE.ret) (["list1", "list2", "tail"] as const).forEach((name) => {
     const pt = (x: Snap | undefined): P | undefined => { if (!x) return undefined; const n = name === "list1" ? x.l1 : name === "list2" ? x.l2 : x.tail; if (n === undefined) return undefined; if (n === NONE) return [RX(2) + 30, ROW_Y[name === "list1" ? 0 : 1] + 10]; const p = pos(n, f); return name === "tail" ? [p[0], p[1] + 58] : [p[0] - 108, p[1] + 10]; };
     const now = pt(s), was = pt(before) ?? now; if (!now) return;
-    const p: P = [lerp(was![0], now[0], t), lerp(was![1], now[1], t) + 2 * Math.sin(f * 0.16 + name.length)];
+    const p: P = [lerp(was![0], now[0], t), lerp(was![1], now[1], t) + 5 * Math.sin(f * 0.16 + name.length)];
     blit(ctx, env, pill(env, name), p[0], p[1], 1, 1);
     const n = name === "list1" ? s.l1 : name === "list2" ? s.l2 : s.tail;
     if (n === NONE) g.group("plain", () => text(g, "= None", p[0] + 95, p[1], { size: 22, weight: 700, fill: C.inkSoft }));
